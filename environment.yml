@@ -12,4 +12,5 @@ dependencies:
   - vegafusion-jupyter
   - vegafusion-python-embed
   - vl-convert-python
+  - requests
 prefix: /Users/timberst/miniconda3/envs/breast_cancer_predictor
