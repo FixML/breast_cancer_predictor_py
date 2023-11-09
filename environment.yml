@@ -1,0 +1,15 @@
+name: breast_cancer_predictor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - altair
+  - ipykernel
+  - pandas
+  - python
+  - scikit-learn
+  - vegafusion
+  - vegafusion-jupyter
+  - vegafusion-python-embed
+  - vl-convert-python
+prefix: /Users/timberst/miniconda3/envs/breast_cancer_predictor
