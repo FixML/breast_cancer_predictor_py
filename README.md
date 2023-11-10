@@ -78,7 +78,7 @@ The Breast Cancer Predictor materials here are licensed under the
 Creative Commons Attribution 2.5 Canada License (CC BY 2.5 CA). If
 re-using/re-mixing please provide attribution and link to this webpage.
 
-# References
+## References
 
 <div id="refs" class="references hanging-indent">
 
