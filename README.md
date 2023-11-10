@@ -44,7 +44,7 @@ physicians.
 ## Report
 
 The final report can be found
-[here](https://ttimbers.github.io/breast_cancer_predictor/src/breast_cancer_predict_report.html).
+[here](https://ttimbers.github.io/breast_cancer_predictor_py/src/breast_cancer_predictor_report.html).
 
 ## Usage
 
