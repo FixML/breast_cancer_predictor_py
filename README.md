@@ -1,7 +1,6 @@
 # Breast Cancer Predictor
 
-  - author: Tiffany Timbers
-  - contributors: Melissa Lee
+  - author: Tiffany Timbers, Melissa Lee & Joel Ostblom
 
 Demo of a data analysis project for DSCI 522 (Data Science workflows); a
 course in the Master of Data Science program at the University of
