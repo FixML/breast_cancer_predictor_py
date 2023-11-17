@@ -1,0 +1,13 @@
+services:
+  book-env:
+    image: quay.io/jupyter/scipy-notebook:latest
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work
+    platform: linux/x86_64
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+      

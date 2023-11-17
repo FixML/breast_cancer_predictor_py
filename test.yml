@@ -1,5 +1,4 @@
-#name: breast_cancer_predictor
-name: base
+name: breast_cancer_predictor
 channels:
   - conda-forge
   - defaults
@@ -15,6 +14,5 @@ dependencies:
   - vl-convert-python
   - requests
   - notebook
-  - nb_conda_kernels
-#  - jupyter_contrib_nbextensions
-#prefix: /Users/timberst/miniconda3/envs/breast_cancer_predictor
+  - jupyter_contrib_nbextensions
+prefix: /Users/timberst/miniconda3/envs/breast_cancer_predictor
