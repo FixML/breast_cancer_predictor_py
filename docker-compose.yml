@@ -1,6 +1,6 @@
 services:
   book-env:
-    image: quay.io/jupyter/scipy-notebook:latest
+    image: quay.io/jupyter/minimal-notebook:latest
     ports:
       - "8888:8888"
     volumes:
