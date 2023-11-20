@@ -1,11 +1,10 @@
 services:
   book-env:
-    image: quay.io/jupyter/minimal-notebook:latest
+    image: test13
     ports:
       - "8888:8888"
     volumes:
       - .:/home/jovyan/work
-    platform: linux/x86_64
     deploy:
       resources:
         limits:
