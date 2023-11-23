@@ -45,31 +45,58 @@ physicians.
 The final report can be found
 [here](https://ttimbers.github.io/breast_cancer_predictor_py/src/breast_cancer_predictor_report.html).
 
-## Usage
-
-First time running the project,
-run the following from the root of this repository:
-
-``` bash
-conda env create --file environment.yml
-```
-
-To run the analysis,
-run the following from the root of this repository:
-
-``` bash
-conda activate breast_cancer_predictor
-jupyter lab 
-```
-
-Open `src/breast_cancer_predict_report.ipynb` in Jupyter Lab
-and under the "Kernel" menu click "Restart Kernel and Run All Cells...".
-
 ## Dependencies
 
-- `conda` (version 23.9.0 or higher)
-- `nb_conda_kernels` (version 2.3.1 or higher)
-- Python and packages listed in [`environment.yml`](environment.yml)
+- [Docker](https://www.docker.com/)
+
+## Usage
+
+#### Setup
+
+1. [Install](https://www.docker.com/get-started/) 
+and launch Docker on your computer.
+
+2. Clone this GitHub repository.
+
+#### Running the analysis
+
+1. Navigate to the root of this project on your computer using the
+   command line and enter the following command:
+
+``` 
+docker compose up
+```
+
+2. In the terminal, look for a URL that starts with 
+`http://127.0.0.1:8888/lab?token=` 
+(for an example, see the highlighted text in the terminal below). 
+Copy and paste that URL into your browser.
+
+<img src="img/jupyter-container-web-app-launch-url.png" width=400>
+
+3. To run the analysis,
+open `src/breast_cancer_predict_report.ipynb` in Jupyter Lab you just launched
+and under the "Kernel" menu click "Restart Kernel and Run All Cells...".
+
+#### Clean up
+
+1. To shut down the container and clean up the resources, 
+type `Cntrl` + `C` in the terminal
+where you launched the container, and then type `docker compose rm`
+
+## Developer notes
+
+#### Adding a new dependency
+
+1. Add the dependency to the `Dockerfile` file on a new branch.
+
+2. Re-build the Docker image locally to ensure it builds and runs properly.
+
+3. Push the changes to GitHub, and send a pull request to merge the new
+   dependency into the `main` branch.
+
+4. Once the pull request has been approved and merged, the new Docker
+   image will be built and pushed to Docker Hub automatically.
 
 ## License
 

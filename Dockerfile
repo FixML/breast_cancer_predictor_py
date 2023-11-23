@@ -1,5 +1,6 @@
 FROM quay.io/jupyter/minimal-notebook:notebook-7.0.6
 
+# install necessary packages for analysis
 RUN conda install -y \
     python=3.11.6 \
     altair=5.1.2 \
