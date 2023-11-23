@@ -1,6 +1,6 @@
 services:
   breast_cancer_predictor:
-    image: test13
+    image: ttimbers/breast_cancer_predictor_py:660944d
     ports:
       - "8888:8888"
     volumes:
