@@ -1,5 +1,5 @@
 services:
-  book-env:
+  breast_cancer_predictor:
     image: test13
     ports:
       - "8888:8888"
@@ -9,4 +9,5 @@ services:
       resources:
         limits:
           memory: 5G
+    platform: linux/amd64
       
