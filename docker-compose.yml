@@ -1,0 +1,13 @@
+services:
+  breast_cancer_predictor:
+    image: test13
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+    platform: linux/amd64
+      
