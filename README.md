@@ -100,9 +100,12 @@ where you launched the container, and then type `docker compose rm`
 
 ## License
 
-The Breast Cancer Predictor materials here are licensed under the
-Creative Commons Attribution 2.5 Canada License (CC BY 2.5 CA). If
+The Breast Cancer Predictor report contained herein are licensed under the
+[Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+See [the license file](LICENSE.md) for more information. . If
 re-using/re-mixing please provide attribution and link to this webpage.
+The software code contained within this repository is licensed under the
+MIT license. See [the license file](LICENSE.md) for more information.
 
 ## References
 
