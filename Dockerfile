@@ -1,3 +1,4 @@
+# Use Jupyter's minimal-notebook as base image
 FROM quay.io/jupyter/minimal-notebook:notebook-7.0.6
 
 # install necessary packages for analysis
