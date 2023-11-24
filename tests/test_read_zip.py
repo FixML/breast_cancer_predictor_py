@@ -20,6 +20,7 @@ with open('tests/test_zip_data2/test4.txt', 'w') as file:
 
 test_files_txt_csv = ['test1.txt', 'test2.csv']
 test_files_subdir = ['test1.txt', 'test2.csv', 'subdir/test3.txt']
+test_files_2txt_csv = ['test1.txt', 'test2.csv', 'test4.txt']
 
 # URL for Case 1 (zip file containing 'test1.txt' and 'test2.csv')
 url_txt_csv_zip = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw/main/tests/files_txt_csv.zip'
@@ -66,6 +67,19 @@ def test_read_zip_subdir():
             os.remove(file)
     if os.path.exists('testss/test_zip_data1/subdir'):
         shutil.rmtree('testss/test_zip_data1/subdir')
+
+# test read_zip function can download and extract a zip file containing two files 
+# into a directory that already contains a file
+def test_read_zip_2txt_csv():
+    read_zip(url_txt_csv_zip, 'tests/test_zip_data2')
+    # List of files you expect to find in the directory
+    for file in test_files_2txt_csv:
+        file_path = os.path.join('tests/test_zip_data2', file)
+        assert os.path.isfile(file_path)
+    # clean up unzipped files
+    for file in test_files_txt_csv:
+        if os.path.exists(file):
+            os.remove(file)
 
 # test read_zip function throws an error if the zip file 
 # at the input URL is empty
