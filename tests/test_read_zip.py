@@ -67,10 +67,21 @@ def test_read_zip_subdir():
     if os.path.exists('testss/test_zip_data1/subdir'):
         shutil.rmtree('testss/test_zip_data1/subdir')
 
+# test read_zip function throws an error if the zip file 
+# at the input URL is empty
+def test_read_zip_empty_zip():
+    with pytest.raises(ValueError, match='The ZIP file is empty.'):
+        read_zip(url_empty_zip, 'tests/test_zip_data1')
+
 # test read_zip function throws an error if the input URL is invalid 
 def test_read_zip_error_on_invalid_url(mock_response):
     with pytest.raises(ValueError, match='The URL provided does not exist.'):
-        read_zip('https://example.com', 'tests/test_zip_data1')    # add tests here
+        read_zip('https://example.com', 'tests/test_zip_data1')
+
+# test read_zip function throws an error if the URL is not a zip file
+def test_read_zip_error_on_nonzip_url():
+    with pytest.raises(ValueError, match='The URL provided does not point to a zip file.'):
+        read_zip('https://github.com/', 'tests/test_zip_data1')
 
 # test read_zip function throws an error 
 # if the  directory path provided does not exist

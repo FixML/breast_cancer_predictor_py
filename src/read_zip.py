@@ -18,6 +18,7 @@ def read_zip(url, directory):
     None
     """
     request = requests.get(url)
+    filename_from_url = os.path.basename(url)
 
     # check if URL exists, if not raise an error
     if request.status_code != 200:
@@ -31,10 +32,20 @@ def read_zip(url, directory):
     if not os.path.isdir(directory):
         raise ValueError('The directory provided does not exist.')
 
-    filename_from_url = os.path.basename(url)
+    # write the zip file to the directory
     path_to_zip_file = os.path.join(directory, filename_from_url)
     with open(path_to_zip_file, 'wb') as f:
         f.write(request.content)
 
+    # get list of files/directories in the directory
+    original_files = os.listdir(directory)
+
+    # extract the zip file to the directory
     with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
         zip_ref.extractall(directory)
+
+    # check if any files were extracted, if not raise an error
+    # get list of files/directories in the directory
+    current_files = os.listdir(directory)
+    if len(current_files) == len(original_files):
+        raise ValueError('The ZIP file is empty.')
