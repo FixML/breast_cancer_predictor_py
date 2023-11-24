@@ -34,10 +34,8 @@ with zipfile.ZipFile('empty.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
 
 # Clean up the files and directories created
 test_files = ['test1.txt', 'test2.csv']
-
 for file in test_files:
     if os.path.exists(file):
         os.remove(file)
-
 if os.path.exists("subdir"):
     shutil.rmtree("subdir")
