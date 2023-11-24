@@ -10,4 +10,5 @@ RUN conda install -y \
     scikit-learn=1.3.2 \
     requests=2.31.0 \
     notebook=7.0.6 \
-    pytest=7.4.3
+    pytest=7.4.3 \
+    responses=0.24.1

@@ -105,6 +105,11 @@ where you launched the container, and then type `docker compose rm`
 
 5. Send a pull request to merge the changes into the `main` branch. 
 
+#### Running the tests
+Tests are run using the `pytest` command in the root of the project.
+More details about the test suite can be found in the 
+[`tests`](tests) directory.
+
 ## License
 
 The Breast Cancer Predictor report contained herein are licensed under the

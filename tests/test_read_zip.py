@@ -1,6 +1,7 @@
 import pytest
 import os
 import shutil
+import responses
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.read_zip import read_zip
@@ -29,6 +30,13 @@ url_txt_subdir_zip = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw
 # URL for Case 3 (empty zip file)
 url_empty_zip = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw/main/tests/empty.zip'
 
+# mock non-existing URL
+@pytest.fixture
+def mock_response():
+    # Mock a response with a non-200 status code
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.GET, 'https://example.com', status=404)
+        yield
 
 # Tests
 
@@ -59,17 +67,13 @@ def test_read_zip_subdir():
     if os.path.exists('testss/test_zip_data1/subdir'):
         shutil.rmtree('testss/test_zip_data1/subdir')
 
-# test read_zip function throws an error if the zip file is empty
-#def test_read_zip_error_on_empty():
-    # add tests here
-
 # test read_zip function throws an error if the input URL is invalid 
-# (e.g., points to a non-existent file or a non-zip file)
-#def test_read_zip_error_on_invalid_url():
-    # add tests here
+def test_read_zip_error_on_invalid_url(mock_response):
+    with pytest.raises(ValueError, match='The URL provided does not exist.'):
+        read_zip('https://example.com', 'tests/test_zip_data1')    # add tests here
 
 # test read_zip function throws an error 
 # if the  directory path provided does not exist
-#def test_read_zip_error_on_missing_dir():
-    # add tests here
-
+def test_read_zip_error_on_missing_dir():
+    with pytest.raises(ValueError, match='The directory provided does not exist.'):
+        read_zip(url_txt_csv_zip, 'tests/test_zip_data3')
