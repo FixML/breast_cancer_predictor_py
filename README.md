@@ -79,8 +79,13 @@ Copy and paste that URL into your browser.
 <img src="img/jupyter-container-web-app-launch-url.png" width=400>
 
 3. To run the analysis,
-open `src/breast_cancer_predict_report.ipynb` in Jupyter Lab you just launched
-and under the "Kernel" menu click "Restart Kernel and Run All Cells...".
+enter the following commands in the terminal in the project root:
+
+```
+python scripts/download_data.py --url="https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip" --write-to="data/raw"
+
+python scripts/split_n_preprocess.py --raw_data=data/raw/wdbc.data --write_to=results
+```
 
 #### Clean up
 
