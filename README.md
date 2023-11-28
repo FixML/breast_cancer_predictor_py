@@ -94,6 +94,8 @@ python scripts/split_n_preprocess.py --raw-data=data/raw/wdbc.data \
    --seed=522
 
 # perform eda and save plots
+python scripts/eda.py --processed-training-data=data/processed/scaled_cancer_train.csv \
+   --plot-to=results/figures
 
 # train model, create visualize tuning, and save plot and model
 python scripts/fit_breast_cancer_classifier.py --training-data=data/processed/cancer_train.csv \
@@ -102,6 +104,9 @@ python scripts/fit_breast_cancer_classifier.py --training-data=data/processed/ca
    --pipeline-to=results/models \
    --plot-to=results/figures \
    --seed=523
+
+# evaluate model on test data and save results
+# TBD
 ```
 
 #### Clean up

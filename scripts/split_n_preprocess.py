@@ -74,8 +74,8 @@ def main(raw_data, data_to, preprocessor_to, seed):
         cancer, train_size=0.70, stratify=cancer["class"]
     )
 
-    cancer_train.to_csv(os.path.join(data_to, "cancer_train.csv"))
-    cancer_test.to_csv(os.path.join(data_to, "cancer_test.csv"))
+    cancer_train.to_csv(os.path.join(data_to, "cancer_train.csv"), index=False)
+    cancer_test.to_csv(os.path.join(data_to, "cancer_test.csv"), index=False)
 
     cancer_preprocessor = make_column_transformer(
         (StandardScaler(), make_column_selector(dtype_include='number')),
@@ -88,8 +88,8 @@ def main(raw_data, data_to, preprocessor_to, seed):
     scaled_cancer_train = cancer_preprocessor.transform(cancer_train)
     scaled_cancer_test = cancer_preprocessor.transform(cancer_test)
 
-    scaled_cancer_train.to_csv(os.path.join(data_to, "scaled_cancer_train.csv"))
-    scaled_cancer_test.to_csv(os.path.join(data_to, "scaled_cancer_test.csv"))
+    scaled_cancer_train.to_csv(os.path.join(data_to, "scaled_cancer_train.csv"), index=False)
+    scaled_cancer_test.to_csv(os.path.join(data_to, "scaled_cancer_test.csv"), index=False)
 
 if __name__ == '__main__':
     main()
