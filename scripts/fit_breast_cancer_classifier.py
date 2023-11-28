@@ -13,6 +13,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import fbeta_score, make_scorer
+from joblib import dump
 
 @click.command()
 @click.option('--training-data', type=str, help="Path to training data")
@@ -34,7 +35,6 @@ def main(training_data, preprocessor, columns_to_drop, pipeline_to, plot_to, see
 
     if columns_to_drop:
         to_drop = pd.read_csv(columns_to_drop).feats_to_drop.tolist()
-        print(to_drop)
         cancer_train = cancer_train.drop(columns=to_drop)
 
     # tune model (here, find K for k-nn using 30 fold cv)
@@ -58,7 +58,8 @@ def main(training_data, preprocessor, columns_to_drop, pipeline_to, plot_to, see
         cancer_train["class"]
     )
 
-    pickle.dump(cancer_fit, open(os.path.join(pipeline_to, "cancer_pipeline.pickle"), "wb"))
+    with open(os.path.join(pipeline_to, "cancer_pipeline.pickle"), 'wb') as f:
+        pickle.dump(cancer_fit, f)
 
     accuracies_grid = pd.DataFrame(cancer_fit.cv_results_)
 

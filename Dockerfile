@@ -12,5 +12,5 @@ RUN conda install -y \
     notebook=7.0.6 \
     pytest=7.4.3 \
     responses=0.24.1 \
-    click=8.0.3 \
+    click=8.1.7 \
     vl-convert-python=1.1.0
