@@ -61,7 +61,7 @@ def main(scaled_test_data, columns_to_drop, pipeline_from, results_to, seed):
         cancer_preds["class"],
         cancer_preds["predicted"],
     )
-    confusion_matrix.to_csv(os.path.join(results_to, "confusion_matrix.csv"), index=False)
+    confusion_matrix.to_csv(os.path.join(results_to, "confusion_matrix.csv"))
 
 if __name__ == '__main__':
     main()

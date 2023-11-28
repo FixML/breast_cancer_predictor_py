@@ -1,3 +1,3 @@
-Benign,Malignant
-107,0
-3,61
+class,Benign,Malignant
+Benign,107,0
+Malignant,3,61
