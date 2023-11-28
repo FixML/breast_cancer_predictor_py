@@ -83,13 +83,25 @@ enter the following commands in the terminal in the project root:
 
 ```
 # download and extract data
-python scripts/download_data.py --url="https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip" --write-to="data/raw"
+python scripts/download_data.py --url="https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip" \
+   --write-to="data/raw"
 
 # split data into train and test sets, preprocess data for eda 
 # and save preprocessor
-python scripts/split_n_preprocess.py --raw-data=data/raw/wdbc.data --data-to=data/processed --preprocessor-to=results/models --seed=522
+python scripts/split_n_preprocess.py --raw-data=data/raw/wdbc.data \
+   --data-to=data/processed \
+   --preprocessor-to=results/models \
+   --seed=522
 
+# perform eda and save plots
 
+# train model, create visualize tuning, and save plot and model
+python scripts/fit_breast_cancer_classifier.py --training-data=data/processed/cancer_train.csv \
+   --preprocessor=results/models/cancer_preprocessor.pickle \
+   --columns-to-drop=data/processed/columns_to_drop.csv \
+   --pipeline-to=results/models \
+   --plot-to=results/figures \
+   --seed=523
 ```
 
 #### Clean up

@@ -4,22 +4,22 @@
 
 import click
 import os
+import altair as alt
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.model_selection import train_test_split
 from sklearn import set_config
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.compose import make_column_transformer, make_column_selector
-
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import fbeta_score, make_scorer
 
 @click.command()
 @click.option('--training-data', type=str, help="Path to training data")
 @click.option('--preprocessor', type=str, help="Path to preprocessor object")
 @click.option('--columns-to-drop', type=str, help="Optional: columns to drop")
 @click.option('--pipeline-to', type=str, help="Path to directory where the pipeline object will be written to")
-@click.option('--plot-to', type=int, help="Path to directory where the plot will be written to")
+@click.option('--plot-to', type=str, help="Path to directory where the plot will be written to")
 @click.option('--seed', type=int, help="Random seed", default=123)
 
 def main(training_data, preprocessor, columns_to_drop, pipeline_to, plot_to, seed):
@@ -30,10 +30,11 @@ def main(training_data, preprocessor, columns_to_drop, pipeline_to, plot_to, see
 
     # read in data & preprocessor
     cancer_train = pd.read_csv(training_data)
-    pickle.load(open(preprocessor, "rb"))
+    cancer_preprocessor = pickle.load(open(preprocessor, "rb"))
 
     if columns_to_drop:
-        to_drop = pd.read_csv(columns_to_drop).['feats_to_drop'].tolist()
+        to_drop = pd.read_csv(columns_to_drop).feats_to_drop.tolist()
+        print(to_drop)
         cancer_train = cancer_train.drop(columns=to_drop)
 
     # tune model (here, find K for k-nn using 30 fold cv)
