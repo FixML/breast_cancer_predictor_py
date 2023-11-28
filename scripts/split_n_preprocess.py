@@ -12,17 +12,21 @@ from sklearn import set_config
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer, make_column_selector
-np.random.seed(522)
-set_config(transform_output="pandas")
+
 
 @click.command()
-@click.option('--raw_data', type=str, help="Path to raw data")
-@click.option('--write_to', type=str, help="Path to directory where processed data will be written to")
+@click.option('--raw-data', type=str, help="Path to raw data")
+@click.option('--data-to', type=str, help="Path to directory where processed data will be written to")
+@click.option('--preprocessor-to', type=str, help="Path to directory where the preprocessor object will be written to")
+@click.option('--seed', type=int, help="Random seed", default=123)
 
-def main(raw_data, write_to):
+def main(raw_data, data_to, preprocessor_to, seed):
     '''This script splits the raw data into train and test sets, 
     and then preprocesses the data to be used in exploratory data analysis.
     It also saves the preprocessor to be used in the model training script.'''
+    np.random.seed(seed)
+    set_config(transform_output="pandas")
+
     colnames = [
         "id",
         "class",
@@ -70,22 +74,22 @@ def main(raw_data, write_to):
         cancer, train_size=0.70, stratify=cancer["class"]
     )
 
-    cancer_train.to_csv(os.path.join(write_to, "cancer_train.csv"))
-    cancer_test.to_csv(os.path.join(write_to, "cancer_test.csv"))
+    cancer_train.to_csv(os.path.join(data_to, "cancer_train.csv"))
+    cancer_test.to_csv(os.path.join(data_to, "cancer_test.csv"))
 
     cancer_preprocessor = make_column_transformer(
         (StandardScaler(), make_column_selector(dtype_include='number')),
         remainder='passthrough',
         verbose_feature_names_out=False
     )
-    pickle.dump(cancer_preprocessor, open(os.path.join(write_to, "cancer_preprocessor.pickle"), "wb"))
+    pickle.dump(cancer_preprocessor, open(os.path.join(preprocessor_to, "cancer_preprocessor.pickle"), "wb"))
 
     cancer_preprocessor.fit(cancer_train)
     scaled_cancer_train = cancer_preprocessor.transform(cancer_train)
     scaled_cancer_test = cancer_preprocessor.transform(cancer_test)
 
-    scaled_cancer_train.to_csv(os.path.join(write_to, "scaled_cancer_train.csv"))
-    scaled_cancer_test.to_csv(os.path.join(write_to, "scaled_cancer_test.csv"))
+    scaled_cancer_train.to_csv(os.path.join(data_to, "scaled_cancer_train.csv"))
+    scaled_cancer_test.to_csv(os.path.join(data_to, "scaled_cancer_test.csv"))
 
 if __name__ == '__main__':
     main()
