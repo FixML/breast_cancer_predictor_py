@@ -115,6 +115,8 @@ python scripts/evaluate_breast_cancer_predictor.py \
    --pipeline-from=results/models/cancer_pipeline.pickle \
    --results-to=results/tables \
    --seed=524
+
+jupyter-book build report
 ```
 
 #### Clean up

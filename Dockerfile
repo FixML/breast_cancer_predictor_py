@@ -13,4 +13,5 @@ RUN conda install -y \
     pytest=7.4.3 \
     responses=0.24.1 \
     click=8.1.7 \
-    vl-convert-python=1.1.0
+    vl-convert-python=1.1.0 \
+    jupyter-book=0.15.1
