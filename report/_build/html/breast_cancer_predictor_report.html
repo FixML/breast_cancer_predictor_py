@@ -318,6 +318,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#results-discussion">Results &amp; Discussion</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
 
             </nav>
@@ -339,26 +340,21 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <div class="cell tag_remove-input docutils container">
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>171
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell tag_remove-input docutils container">
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="summary">
+<section id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h1>
 <p>Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of <span class="pasted-text">0.96</span> and an overall accuracy calculated to be <span class="pasted-text">0.96</span>. On the <span class="pasted-text">171</span> test data cases, it correctly predicted <span class="pasted-text">168</span>.</p>
 <p>However it incorrectly predicted <span class="pasted-text">3</span> cases, and importantly these cases were false negatives; predicting that a tumour is benign when in fact it is malignant. These kind of incorrect predictions could have a severly negative impact on a patients health outcome, thus we recommend continuing study to improve this prediction model before it is put into production in the clinic.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
 <p>Women have a 12.1% lifetime probability of developing breast cancer, and although cancer treatment has improved over the last 30 years, the projected death rate for women’s breast cancer is 22.4 deaths per 100,000 in 2019 <span id="id1">[<a class="reference internal" href="#id26" title="Canadian Cancer Statistics Advisory Committee. Canadian cancer statistics. Canadian Cancer Society, 2019. URL: http://cancer.ca/Canadian-Cancer-Statistics-2019-EN.">Canadian Cancer Statistics Advisory Committee, 2019</a>]</span>. Early detection has been shown to improve outcomes <span id="id2">[<a class="reference internal" href="#id26" title="Canadian Cancer Statistics Advisory Committee. Canadian cancer statistics. Canadian Cancer Society, 2019. URL: http://cancer.ca/Canadian-Cancer-Statistics-2019-EN.">Canadian Cancer Statistics Advisory Committee, 2019</a>]</span>, and thus methods, assays and technologies that help to improve diagnosis may be beneficial for improving outcomes further.</p>
 <p>Here we ask if we can use a machine learning algorithm to predict whether a newly discovered tumour is benign or malignant given tumour image measurements. Answering this question is important because traditional methods for tumour diagnosis are quite subjective and can depend on the diagnosing physicians skill as well as experience <span id="id3">[<a class="reference internal" href="#id15" title="W. Nick Street, W. H. Wolberg, and O. L. Mangasarian. Nuclear feature extraction for breast tumor diagnosis. In Raj S. Acharya and Dmitry B. Goldgof, editors, Biomedical Image Processing and Biomedical Visualization, volume 1905, 861 – 870. International Society for Optics and Photonics, SPIE, 1993. URL: https://doi.org/10.1117/12.148698, doi:10.1117/12.148698.">Street <em>et al.</em>, 1993</a>]</span>. Furthermore, benign tumours are not normally dangerous; the cells stay in the same place and the tumour stops growing before it gets very large. By contrast, in malignant tumours, the cells invade the surrounding tissue and spread into nearby organs where they can cause serious damage. Thus, if a machine learning algorithm can accurately and effectively predict whether a newly discovered tumour benign or malignant given tumour image measurements this could lead to less subjective, and more scalable breast cancer tumour diagnosis which could contribute to better patient outcomes.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="methods">
+<section id="methods">
 <h1>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h1>
 <section id="data">
 <h2>Data<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h2>
@@ -369,7 +365,7 @@ document.write(`
 <p>The k-nearest neighbors (k-nn) algorithm was used to build a classification model to predict whether a tumour mass was benign or malignant (found in the class column of the data set). All variables included in the original data set, with the exception of the standard error of fractal dimension, smoothness, symmetry and texture were used to fit the model. Data was split with 70% being partitioned into the training set and 30% being partitioned into the test set. The hyperparameter <span class="math notranslate nohighlight">\(K\)</span> was chosen using 30-fold cross validation with the F2 score as the classification metric. Beta was chosen to be set to 2 for the F2 score to increase the weight on recall during fitting because the application is cancer screening and false negatives are very undesirable in such an application. All variables were standardized just prior to model fitting. The Python programming language <span id="id6">[<a class="reference internal" href="#id17" title="Guido Van Rossum and Fred L. Drake. Python 3 Reference Manual. CreateSpace, Scotts Valley, CA, 2009. ISBN 1441412697.">Van Rossum and Drake, 2009</a>]</span> and the following Python packages were used to perform the analysis: requests <span id="id7">[<a class="reference internal" href="#id27" title="Kenneth Reitz. Requests: HTTP for Humans. 2011. Python package version 2.31.0. URL: https://requests.readthedocs.io.">Reitz, 2011</a>]</span>, zipfile <span id="id8">[<a class="reference internal" href="#id17" title="Guido Van Rossum and Fred L. Drake. Python 3 Reference Manual. CreateSpace, Scotts Valley, CA, 2009. ISBN 1441412697.">Van Rossum and Drake, 2009</a>]</span>, numpy <span id="id9">[<a class="reference internal" href="#id28" title="Charles R Harris, K Jarrod Millman, Stéfan J van der Walt, Ralf Gommers, Pauli Virtanen, David Cournapeau, Eric Wieser, Julian Taylor, Sebastian Berg, Nathaniel J Smith, Robert Kern, Matti Picus, Stephan Hoyer, Marten H van Kerkwijk, Matthew Brett, Allan Haldane, Jaime Fernández del Río, Mark Wiebe, Pearu Peterson, Pierre Gérard-Marchant, Kevin Sheppard, Tyler Reddy, Warren Weckesser, Hameer Abbasi, Christoph Gohlke, and Travis E Oliphant. Array programming with NumPy. Nature, 585(7825):357–362, 2020. URL: https://doi.org/10.1038/s41586-020-2649-2, doi:10.1038/s41586-020-2649-2.">Harris <em>et al.</em>, 2020</a>]</span>, Pandas <span id="id10">[<a class="reference internal" href="#id18" title="Wes McKinney. Data structures for statistical computing in python. In Stéfan van der Walt and Jarrod Millman, editors, Proceedings of the 9th Python in Science Conference, =51 - 56. 2010.">McKinney, 2010</a>]</span>, <span id="id11">[<a class="reference internal" href="#id29" title="Jake VanderPlas. Altair: interactive statistical visualizations for python. Journal of open source software, 3(7825):1057, 2018. URL: https://doi.org/10.21105/joss.01057, doi:10.21105/joss.01057.">VanderPlas, 2018</a>]</span>, scikit-learn <span id="id12">[<a class="reference internal" href="#id30" title="F. Pedregosa, G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, P. Prettenhofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and E. Duchesnay. Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12:2825–2830, 2011.">Pedregosa <em>et al.</em>, 2011</a>]</span>. The code used to perform the analysis and create this report can be found here: <a class="github reference external" href="https://github.com/ttimbers/breast_cancer_predictor_py">ttimbers/breast_cancer_predictor_py</a>.</p>
 </section>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="results-discussion">
+<section id="results-discussion">
 <h1>Results &amp; Discussion<a class="headerlink" href="#results-discussion" title="Permalink to this heading">#</a></h1>
 <p>To look at whether each of the predictors might be useful to predict the tumour class, we plotted the distributions of each predictor from the training data set and coloured the distribution by class (benign: blue and malignant: orange, <a class="reference internal" href="#feature-densities-by-class"><span class="std std-numref">Figure 1</span></a>). In doing this we see that class distributions for all of the mean and max predictors for all the measurements overlap somewhat, but do show quite a difference in their centres and spreads. This is less so for the standard error (se) predictors. In particular, the standard errors of fractal dimension, smoothness, symmetry and texture look very similar in both the distribution centre and spread. Thus, we choose to omit these from our model.</p>
 <figure class="align-default" id="feature-densities-by-class">
@@ -380,25 +376,25 @@ document.write(`
 </figure>
 <p>We chose to use a simple classification model using the k-nearest neighbours algorithm. To find the model that best predicted whether a tumour was benign or malignant, we performed 30-fold cross validation using F2 score (beta = 2) as our metric of model prediction performance to select K (number of nearest neighbours). We observed that the optimal K was <span class="pasted-text">4</span> (<a class="reference internal" href="#cancer-choose-k"><span class="std std-numref">Figure 2</span></a>).</p>
 <figure class="align-default" id="cancer-choose-k">
-<a class="reference internal image-reference" href="_images/cancer_choose_k.png"><img alt="_images/cancer_choose_k.png" src="_images/cancer_choose_k.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="_images/cancer_choose_k.png"><img alt="_images/cancer_choose_k.png" src="_images/cancer_choose_k.png" style="width: 600px;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 2 </span><span class="caption-text">Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied.</span><a class="headerlink" href="#cancer-choose-k" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="test-scores-df" style="width: 300px">
+<figure class="align-default" id="test-scores-df" style="width: 400px">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_8fc0d">
+<table id="T_54739">
   <thead>
     <tr>
-      <th id="T_8fc0d_level0_col0" class="col_heading level0 col0" >accuracy</th>
-      <th id="T_8fc0d_level0_col1" class="col_heading level0 col1" >F2 score (beta = 2)</th>
+      <th id="T_54739_level0_col0" class="col_heading level0 col0" >accuracy</th>
+      <th id="T_54739_level0_col1" class="col_heading level0 col1" >F2 score (beta = 2)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_8fc0d_row0_col0" class="data row0 col0" >0.960000</td>
-      <td id="T_8fc0d_row0_col1" class="data row0 col1" >0.960000</td>
+      <td id="T_54739_row0_col0" class="data row0 col0" >0.960000</td>
+      <td id="T_54739_row0_col1" class="data row0 col1" >0.960000</td>
     </tr>
   </tbody>
 </table>
@@ -407,7 +403,7 @@ document.write(`
 </figcaption>
 </figure>
 <p>Our prediction model performed quite well on test data, with a final overall accuracy of <span class="pasted-text">0.96</span> and F2 (beta = 2) score of <span class="pasted-text">0.96</span>. Other indicators that our model performed well come from the confusion matrix, where it only made <span class="pasted-text">3</span> mistakes. However all <span class="pasted-text">3</span> mistakes were predicting a malignant tumour as benign, given the implications this has for patients health, this model is not good enough to yet implement in the clinic (<a class="reference internal" href="#confusion-df"><span class="std std-numref">Figure 4</span></a>).</p>
-<figure class="align-default" id="confusion-df" style="width: 300px">
+<figure class="align-default" id="confusion-df" style="width: 650px">
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -453,6 +449,9 @@ document.write(`
 </figcaption>
 </figure>
 <p>To further improve this model in future with hopes of arriving one that could be used in the clinic, there are several things we can suggest. First, we could look closely at the <span class="pasted-text">3</span> misclassified observations and compare them to several observations that were classified correctly (from both classes). The goal of this would be to see which feature(s) may be driving the misclassification and explore whether any feature engineering could be used to help the model better predict on observations that it currently is making mistakes on. Additionally, we would try seeing whether we can get improved predictions using other classifiers. One classifier we might try is random forest forest because it automatically allows for feature interaction, where k-nn does not. Finally, we also might improve the usability of the model in the clinic if we output and report the probability estimates for predictions. If we cannot prevent misclassifications through the approaches suggested above, at least reporting a probability estimates for predictions would allow the clinician to know how confident the model was in its prediction. Thus the clinician may then have the ability to perform additional diagnostic assays if the probability estimates for prediction of a given tumour class is not very high.</p>
+</section>
+<section id="references">
+<h1>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h1>
 <div class="docutils container" id="id13">
 <dl class="citation">
 <dt class="label" id="id28"><span class="brackets"><a class="fn-backref" href="#id9">HMvdW+20</a></span></dt>
@@ -537,6 +536,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#results-discussion">Results &amp; Discussion</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
 
   </nav></div>
