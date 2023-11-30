@@ -1,10 +1,10 @@
 services:
   jupyter-lab:
-    image: ttimbers/breast_cancer_predictor_py:2c80325
+    image: ttimbers/breast_cancer_predictor_py:8c2e08e
     ports:
       - "8888:8888"
     volumes:
-      - .:/home/jovyan/work
+      - .:/home/jovyan
     deploy:
       resources:
         limits:
@@ -12,9 +12,9 @@ services:
     platform: linux/amd64
 
   terminal:
-    image: ttimbers/breast_cancer_predictor_py:2c80325
+    image: ttimbers/breast_cancer_predictor_py:8c2e08e
     volumes:
-      - .:/home/jovyan/work
+      - .:/home/jovyan
     deploy:
       resources:
         limits:

@@ -116,7 +116,9 @@ python scripts/evaluate_breast_cancer_predictor.py \
    --results-to=results/tables \
    --seed=524
 
+# build HTML report and copy build to docs folder
 jupyter-book build report
+cp -r report/_build/html/* docs
 ```
 
 #### Clean up
