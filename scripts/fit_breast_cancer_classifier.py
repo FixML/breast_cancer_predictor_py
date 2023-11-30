@@ -93,7 +93,7 @@ def main(training_data, preprocessor, columns_to_drop, pipeline_to, plot_to, see
     )
 
     plot = line_n_point + line_n_point.mark_circle(color='black') + error_bar
-    plot.save(os.path.join(plot_to, "cancer_choose_k.png"))
+    plot.save(os.path.join(plot_to, "cancer_choose_k.png"), scale_factor=2.0)
 
 if __name__ == '__main__':
     main()

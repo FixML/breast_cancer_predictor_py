@@ -38,7 +38,7 @@ def main(processed_training_data, plot_to):
         color='class:N'
     ).facet(
         'predictor:N',
-        columns=4
+        columns=3
     ).resolve_scale(
         y='independent'
     )
