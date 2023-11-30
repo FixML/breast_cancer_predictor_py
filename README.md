@@ -68,7 +68,7 @@ and launch Docker on your computer.
    command line and enter the following command:
 
 ``` 
-docker compose up
+docker compose up jupyter-lab
 ```
 
 2. In the terminal, look for a URL that starts with 
@@ -124,6 +124,16 @@ jupyter-book build report
 1. To shut down the container and clean up the resources, 
 type `Cntrl` + `C` in the terminal
 where you launched the container, and then type `docker compose rm`
+
+> Note if you prefer to work in VS Code, you can run the following 
+> from the root of the project in a terminal in VS Code 
+> to launch the container in the terminal there:
+>
+> ```
+> docker compose run --rm terminal bash
+>```
+>
+> To exit the container type `exit` in the terminal.
 
 ## Developer notes
 
