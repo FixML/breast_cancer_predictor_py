@@ -38,12 +38,13 @@ def main(processed_training_data, plot_to):
         color='class:N'
     ).facet(
         'predictor:N',
-        columns=5
+        columns=4
     ).resolve_scale(
         y='independent'
     )
 
-    plot.save(os.path.join(plot_to, "feature_densities_by_class.png"))
+    plot.save(os.path.join(plot_to, "feature_densities_by_class.png"),
+              scale_factor=2.0)
 
 if __name__ == '__main__':
     main()
