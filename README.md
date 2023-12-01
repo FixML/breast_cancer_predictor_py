@@ -9,7 +9,6 @@ British Columbia.
 ## About
 
 Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.96. On the 171 test data cases, it correctly predicted 168.
-
 However it incorrectly predicted 3 cases, and importantly these cases were false negatives; predicting that a tumour is benign when in fact it is malignant. These kind of incorrect predictions could have a severly negative impact on a patients health outcome, thus we recommend continuing study to improve this prediction model before it is put into production in the clinic.
 
 
