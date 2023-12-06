@@ -14,4 +14,5 @@ RUN conda install -y \
     responses=0.24.1 \
     click=8.1.7 \
     vl-convert-python=1.1.0 \
-    jupyter-book=0.15.1
+    jupyter-book=0.15.1 \
+    make

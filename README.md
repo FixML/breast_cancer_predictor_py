@@ -51,7 +51,7 @@ The final report can be found
 used to manage the software dependencies for this project.
 The Docker image used for this project is based on the
 `quay.io/jupyter/minimal-notebook:notebook-7.0.6` image.
-Additioanal dependencies are specified int the [`Dockerfile`](Dockerfile).
+Additional dependencies are specified int the [`Dockerfile`](Dockerfile).
 
 ## Usage
 
