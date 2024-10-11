@@ -19,20 +19,14 @@ def main(url, write_to):
     request = requests.get(url)
     filename_from_url = os.path.basename(url)
 
-    # check if URL exists, if not raise an error
-    if request.status_code != 200:
-        raise ValueError('The URL provided does not exist.')
-    
-    # check if the URL points to a zip file, if not raise an error  
-    #if request.headers['content-type'] != 'application/zip':
-    if filename_from_url[-4:] != '.zip':
-        raise ValueError('The URL provided does not point to a zip file.')
-
     try:
         read_zip(url, write_to)
-    except:
-        os.makedirs(write_to)
-        read_zip(url, write_to)
+    except FileNotFoundError as e:
+        if e.args == 'The directory provided does not exist.':
+            os.makedirs(write_to)
+            read_zip(url, write_to)
+        else:
+            raise e
 
 if __name__ == '__main__':
     main()

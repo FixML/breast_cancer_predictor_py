@@ -29,10 +29,14 @@ def read_zip(url, directory):
     if filename_from_url[-4:] != '.zip':
         raise ValueError('The URL provided does not point to a zip file.')
     
-    # check if the directory exists, if not raise an error
+    # check if the directory path exists, if not raise an error
+    if not os.path.exists(directory):
+        raise FileNotFoundError('The directory provided does not exist.')
+    
+    # check if the dirctory path provided is a directory, if not raise an error
     if not os.path.isdir(directory):
-        raise ValueError('The directory provided does not exist.')
-
+        raise NotADirectoryError('The directory path provided is not a directory')
+    
     # write the zip file to the directory
     path_to_zip_file = os.path.join(directory, filename_from_url)
     with open(path_to_zip_file, 'wb') as f:
