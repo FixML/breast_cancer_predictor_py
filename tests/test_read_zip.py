@@ -105,5 +105,5 @@ def test_read_zip_error_on_nonexistent_dir():
 
 # if the  directory path provided does not exist
 def test_read_zip_error_on_missing_dir():
-    with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory'):
+    with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.'):
         read_zip(url_txt_csv_zip, 'tests/conftest.py')
