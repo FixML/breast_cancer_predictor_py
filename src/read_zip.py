@@ -35,7 +35,7 @@ def read_zip(url, directory):
     
     # check if the dirctory path provided is a directory, if not raise an error
     if not os.path.isdir(directory):
-        raise NotADirectoryError('The directory path provided is not a directory')
+        raise NotADirectoryError('The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.')
     
     # write the zip file to the directory
     path_to_zip_file = os.path.join(directory, filename_from_url)
