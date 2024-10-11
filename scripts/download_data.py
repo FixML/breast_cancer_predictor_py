@@ -14,10 +14,6 @@ from src.read_zip import read_zip
 
 def main(url, write_to):
     """Downloads data zip data from the web to a local filepath and extracts it."""
-    
-    request = requests.get(url)
-    filename_from_url = os.path.basename(url)
-
     try:
         read_zip(url, write_to)
     except FileNotFoundError as e:
