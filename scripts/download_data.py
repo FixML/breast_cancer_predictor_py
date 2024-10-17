@@ -16,9 +16,12 @@ def main(url, write_to):
     """Downloads data zip data from the web to a local filepath and extracts it."""
     try:
         read_zip(url, write_to)
-    except:
-        os.makedirs(write_to)
-        read_zip(url, write_to)
+    except FileNotFoundError as e:
+        if e.args == 'The directory provided does not exist.':
+            os.makedirs(write_to)
+            read_zip(url, write_to)
+        else:
+            raise e
 
 if __name__ == '__main__':
     main()
