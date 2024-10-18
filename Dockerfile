@@ -16,4 +16,4 @@ RUN conda install -y \
     vl-convert-python=1.7.0 \
     jupyter-book=1.0.3 \
     make 
-RUN pip install great-expectations=1.1.3
+RUN pip install great-expectations==1.1.3
