@@ -12,11 +12,11 @@ def extract_column_name(raw_name_file):
     
     # Test 1: Ensure the raw name file exists, if not raise error
     if not os.path.exists(raw_name_file):
-        raise FileNotFoundError(f"The raw name file does not exist.")
+        raise FileNotFoundError(f"The raw_name file does not exist.")
     
     # Test 2: Ensure the raw name file is a .names file, if not raise error
     if not raw_name_file.endswith('.names'):
-        raise ValueError("The raw name file must be a '.names' file.")
+        raise ValueError("The raw_name file must be a .names file.")
     
     # Extracting column names from downloaded raw file
     text_lines = []
@@ -58,7 +58,7 @@ def read_raw_data(raw_data, col_name):
     
     # Test 3: Ensure the col_name is a list, if not raise error
     if not isinstance(col_name, list):
-        raise ValueError("col_name must be a list.")
+        raise TypeError("col_name must be a list.")
     
     # Test 4: Ensure the list has 32 items, if not raise error
     if len(col_name) != 32:
@@ -75,15 +75,15 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
     """Clean imported data"""
     # Test 1: Ensure the imported_data is a dataframe
     if not isinstance(imported_data, pd.DataFrame):
-        raise ValueError("imported_data must be a data frame.")
+        raise TypeError("imported_data must be a data frame.")
     
     # Test 2: Ensure the drop_columns is a list
     if not isinstance(drop_columns, list):
-        raise ValueError("drop_columns must be a list.")
+        raise TypeError("drop_columns must be a list.")
     
     # Test 3: Ensure the relabel is a dictionary
     if not isinstance(relabel, dict):
-        raise ValueError("relabel must be a dictionary")
+        raise TypeError("relabel must be a dictionary")
     
     cleaned_data = imported_data.drop(columns=drop_columns)
     cleaned_data['class'] = cleaned_data['class'].replace(relabel)

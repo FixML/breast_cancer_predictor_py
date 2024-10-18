@@ -28,13 +28,13 @@ relabel2=['M','B']
 # test extract_column_name function throws an error 
 # if the raw name file does not exist
 def test_extract_column_name_error_on_missing_file():
-    with pytest.raises(FileNotFoundError, match='The raw name file does not exist.'):
+    with pytest.raises(FileNotFoundError, match='The raw_name file does not exist.'):
         extract_column_name('tests/test_name_data.name')
 
 # test extract_column_name function throws an error 
 # if the raw name file is not a .names file
 def test_extract_column_name_error_on_wrong_file_type():
-    with pytest.raises(ValueError, match='The raw name file must be a .names file.'):
+    with pytest.raises(ValueError, match='The raw_name file must be a .names file.'):
         extract_column_name('tests/empty.zip')
 
 # Tests for read_raw_data
@@ -48,13 +48,13 @@ def test_read_raw_data_error_on_missing_file():
 # test read_raw_data function throws an error 
 # if the raw data file is not a .data file
 def test_read_raw_data_error_on_wrong_file_format():
-    with pytest.raises(ValueError, match='The raw data file must be a .names file.'):
+    with pytest.raises(ValueError, match='The raw_data file must be a .data file.'):
         read_raw_data('tests/empty.zip', col_name1)
 
 # test read_raw_data function throws an error 
 # if the col_name is not a list
 def test_read_raw_data_error_on_non_list():
-    with pytest.raises(ValueError, match="col_name must be a list."):
+    with pytest.raises(TypeError, match="col_name must be a list."):
         read_raw_data('tests/test_wdbc.data',col_name2)
 
 # test read_raw_data function throws an error 
@@ -74,18 +74,18 @@ def test_read_raw_data_error_on_wrong_item_type():
 # test clean_data function throws an error
 # if the imported_data is not a dataframe
 def test_clean_data_error_on_wrong_imported_data_format():
-    with pytest.raises(ValueError, match="imported_data must be a data frame."):
+    with pytest.raises(TypeError, match="imported_data must be a data frame."):
         clean_data(imported_data2, drop_columns1, relabel1)
 
 # test clean_data function throws an error
 # if the drop_columns is not a list
 def test_clean_data_error_on_wrong_drop_columns_format():
-    with pytest.raises(ValueError, match="drop_columns must be a list."):
+    with pytest.raises(TypeError, match="drop_columns must be a list."):
         clean_data(imported_data1, drop_columns2, relabel1)
 
 
 # test clean_data function throws an error
 # if the relabel is not a dictionary
 def test_clean_data_error_on_wrong_relabel_format():
-    with pytest.raises(ValueError, match="relabel must be a dictionary"):
+    with pytest.raises(TypeError, match="relabel must be a dictionary"):
         clean_data(imported_data1, drop_columns1, relabel2)
