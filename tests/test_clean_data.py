@@ -1,10 +1,6 @@
 import pytest
-import numpy as np
 import pandas as pd
-from click.testing import CliRunner
-from click import BadParameter
 import os
-from unittest.mock import patch, mock_open
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.clean_data import *
