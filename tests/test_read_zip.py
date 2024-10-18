@@ -31,6 +31,10 @@ url_txt_subdir_zip = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw
 # URL for Case 3 (empty zip file)
 url_empty_zip = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw/main/tests/empty.zip'
 
+# URL for Case 4 (valid zip file from Case 2  with extra parameter/fragment(s)
+# attached at the end of URL)
+url_txt_subdir_zip_with_param_and_frag = 'https://github.com/ttimbers/breast_cancer_predictor_py/raw/main/tests/files_txt_subdir.zip?utm_content=buffercf3b2&utm_medium=social&utm_source=snapchat.com&utm_campaign=buffer#usage'
+
 # mock non-existing URL
 @pytest.fixture
 def mock_response():
@@ -57,6 +61,21 @@ def test_read_zip_txt_csv():
 # and subdirectories containing files
 def test_read_zip_subdir():
     read_zip(url_txt_subdir_zip, 'tests/test_zip_data1')
+    # List of files you expect to find in the directory
+    for file in test_files_subdir:
+        file_path = os.path.join('tests/test_zip_data1', file)
+        assert os.path.isfile(file_path)
+    # clean up unzipped files
+    for file in test_files_subdir:
+        if os.path.exists(file):
+            os.remove(file)
+    if os.path.exists('testss/test_zip_data1/subdir'):
+        shutil.rmtree('testss/test_zip_data1/subdir')
+
+# test read_zip function can download and extract a zip file containing two files 
+# and subdirectories containing files
+def test_read_zip_subdir_with_extra_params_and_frag():
+    read_zip(url_txt_subdir_zip_with_param_and_frag, 'tests/test_zip_data1')
     # List of files you expect to find in the directory
     for file in test_files_subdir:
         file_path = os.path.join('tests/test_zip_data1', file)

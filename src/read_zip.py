@@ -1,6 +1,7 @@
 import os
 import zipfile
 import requests
+from urllib.parse import urlparse
 
 def read_zip(url, directory):
     """
@@ -18,7 +19,7 @@ def read_zip(url, directory):
     None
     """
     request = requests.get(url)
-    filename_from_url = os.path.basename(url)
+    filename_from_url = urlparse(url).path.split('/')[-1]
 
     # check if URL exists, if not raise an error
     if request.status_code != 200:
