@@ -88,3 +88,17 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
     cleaned_data = imported_data.drop(columns=drop_columns)
     cleaned_data['diagnosis'] = cleaned_data['diagnosis'].replace(relabel)
     return cleaned_data
+
+def write_data(cleaned_data, data_to):
+    """Write cleaned and validated data to directory"""
+    # Test 1: Ensure the cleaned_data is a dataframe, if not raise an error
+    if not isinstance(cleaned_data, pd.DataFrame):
+        raise TypeError("cleaned_data must be a data frame.")
+    
+    # Test 2: check if the directory path exists, if not raise an error
+    if not os.path.exists(data_to):
+        raise FileNotFoundError('The directory provided does not exist.')
+
+    # Test 3: check if the dirctory path provided is a directory, if not raise an error
+    if not os.path.isdir(data_to):
+        raise NotADirectoryError('The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.')

@@ -21,6 +21,15 @@ drop_columns2={'1':'id'}
 relabel1={'M' : 'Malignant','B' : 'Benign'}
 relabel2=['M','B']
 
+cleaned_data1 = pd.DataFrame({
+        'id': [1, 2, 3],
+        'class': ['M', 'B', 'M']
+    })
+cleaned_data2 = [1, 2, 3, 4, 5]
+# setup empty directory for data files to be downloaded to
+if not os.path.exists('tests/test_write_data1'):
+    os.makedirs('tests/test_write_data1')
+
 # Tests
 
 # Tests for extract_column_name
@@ -89,3 +98,22 @@ def test_clean_data_error_on_wrong_drop_columns_format():
 def test_clean_data_error_on_wrong_relabel_format():
     with pytest.raises(TypeError, match="relabel must be a dictionary"):
         clean_data(imported_data1, drop_columns1, relabel2)
+
+# Tests for write_data
+
+# test write_data function throws an error
+# if the cleaned_data is not a dataframe
+def test_write_data_error_on_wrong_cleaned_data_format():
+    with pytest.raises(TypeError, match="cleaned_data must be a data frame."):
+        write_data(cleaned_data2, 'tests/test_write_data1')
+
+# test write_data function throws an error 
+# if the write_to path provided does not exist
+def test_read_zip_error_on_nonexistent_dir():
+    with pytest.raises(FileNotFoundError, match='The directory provided does not exist.'):
+        write_data(cleaned_data1, 'tests/test_write_data3')
+
+# if the directory path provided is not directory
+def test_read_zip_error_on_missing_dir():
+    with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.'):
+        write_data(cleaned_data1, 'tests/conftest.py')       
