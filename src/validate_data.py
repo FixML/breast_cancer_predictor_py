@@ -203,7 +203,7 @@ def exp_col_not_null(batch, col_percent):
     >>> batch = some_great_expectations_batch_object
     >>> col_percent = {
     >>>     'diagnosis': 1,
-    >>>     'mean_radium': 0.3
+    >>>     'mean_radium': 0.3 # No more than 30% of values are nulls
     >>> }
     >>> exp_col_not_null(batch, col_type)
     """
@@ -216,6 +216,53 @@ def exp_col_not_null(batch, col_percent):
         check_validation_result(validation_result)
 
 
+def exp_value_range(batch, col_range):
+    """
+    Validates that the numeric values of specified columns are within specific range.
+    
+    Parameters
+    ----------
+    batch : great_expectations.dataset.Dataset
+        The Great Expectations batch object that contains the dataset to be validated.
+        This object must support the `validate()` method that takes an expectation and returns a validation result.
+    
+    col_range : dict
+        A dictionary where:
+        - The keys are column names (str) in the dataset.
+        - The values are the list that contains following value:
+            min_value (comparable type or None): The minimum value for a column entry.
+            max_value (comparable type or None): The maximum value for a column entry.
+            strict_min (boolean): If True, values must be strictly larger than min_value. Default=False.
+            strict_max (boolean): If True, values must be strictly smaller than max_value. Default=False.
 
+    
+    Returns
+    -------
+    None
+        The function does not return anything. It raises an error if validation fails.
+    
+    Raises
+    ------
+    ValidationError
+        Raised if the validation result for any column fails, as determined by the `check_validation_result()` function.
+    
+    Examples
+    --------
+    >>> batch = some_great_expectations_batch_object
+    >>> col_range = {
+    >>>     'mean_radium': [5,25,False,False],
+    >>>     'mean_perimeter': [30,150,False,False]
+    >>> }
+    >>> exp_value_range(batch, col_range)
+    """
+    for i in col_range:
+        expectation = gx.expectations.ExpectColumnValuesToNotBeNull(
+            column=i, 
+            min_value=col_range[i][0], max_value=col_range[i][1], 
+            strict_min=col_range[i][2], strict_max=col_range[i][3]
+        )
+        validation_result = batch.validate(expectation)
+        # Test if this expectation passed, if not throw an error
+        check_validation_result(validation_result)
 
 
