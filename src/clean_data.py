@@ -86,5 +86,5 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
         raise TypeError("relabel must be a dictionary")
     
     cleaned_data = imported_data.drop(columns=drop_columns)
-    cleaned_data['class'] = cleaned_data['class'].replace(relabel)
+    cleaned_data['diagnosis'] = cleaned_data['diagnosis'].replace(relabel)
     return cleaned_data
