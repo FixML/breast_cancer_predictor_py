@@ -2,7 +2,6 @@
 # author: Weilin Han
 # date: 2024-10-03
 
-import numpy as np
 import pandas as pd
 import great_expectations as gx
 
@@ -49,7 +48,7 @@ def check_validation_result(validation_results):
 # Data Schema Validations
 def exp_column_exsist(batch, columns):
     """
-    Validates that the table contains specific columns.
+    Validates that the dataframe contains specific columns.
     
     Parameters
     ----------
@@ -184,7 +183,7 @@ def exp_type_of_col_values(batch, col_type):
     >>> batch = some_great_expectations_batch_object
     >>> col_type = {
     >>>     'diagnosis': 'string',
-    >>>     'mean_radium': 'number'
+    >>>     'mean_radius': 'number'
     >>> }
     >>> exp_type_of_col_values(batch, col_type)
     """
@@ -245,7 +244,7 @@ def exp_col_not_null(batch, col_percent):
     --------
     >>> batch = some_great_expectations_batch_object
     >>> col_percent = {
-    >>>     'diagnosis': 1,
+    >>>     'diagnosis': 0,
     >>>     'mean_radium': 0.3 # No more than 30% of values are nulls
     >>> }
     >>> exp_col_not_null(batch, col_percent)

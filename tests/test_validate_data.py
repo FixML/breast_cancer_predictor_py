@@ -1,8 +1,5 @@
 import pytest
-import numpy as np
 import pandas as pd
-from click.testing import CliRunner
-from click import BadParameter
 import os
 import great_expectations as gx
 from unittest.mock import Mock
