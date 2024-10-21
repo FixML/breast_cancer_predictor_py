@@ -4,7 +4,6 @@
 
 import numpy as np
 import pandas as pd
-import re
 import great_expectations as gx
 
 def create_data_batch(cleaned_data):
@@ -77,6 +76,19 @@ def exp_column_exsist(batch, columns):
     >>> columns = ['diagnosis',	'mean_radius']
     >>> exp_value_set_in_col(batch, col_set)
     """
+
+    # Test 1: Ensure the batch is a gx batch object, if not raise the error
+    if not isinstance(batch, gx.datasource.fluent.interfaces.Batch):
+        raise TypeError("batch must be a great expectation batch object.")
+    
+    # Test 2: Ensure the columns is a list, if not raise the error
+    if not isinstance(columns, list):
+        raise TypeError("columns must be a list.")
+    
+    # Test 3: Ensure the columns is a list only contains strings, if not raise the error
+    if not all(isinstance(item, str) for item in columns):
+        raise ValueError("columns must only contain strings.")
+    
     for i in columns:
         expectation = gx.expectations.ExpectColumnToExist(
             column=i
@@ -120,6 +132,19 @@ def exp_value_set_in_col(batch, col_set):
     >>> }
     >>> exp_value_set_in_col(batch, col_set)
     """
+    # Test 1: Ensure the batch is a gx batch object, if not raise the error
+    if not isinstance(batch, gx.datasource.fluent.interfaces.Batch):
+        raise TypeError("batch must be a great expectation batch object.")
+    
+    # Test 2: Ensure the col_set is a dict, if not raise the error
+    if not isinstance(col_set, dict):
+        raise TypeError("col_set must be a dict.")
+    
+    # Test 3: Ensure the col_set's keys are strings, if not raise the error
+    for col in col_set.keys():
+        if not isinstance(col, str):
+            raise TypeError("col_set keys must be strings.")
+    
     for i in col_set:
         expectation = gx.expectations.ExpectColumnDistinctValuesToContainSet(
             column=i,value_set=col_set[i]
@@ -163,6 +188,24 @@ def exp_type_of_col_values(batch, col_type):
     >>> }
     >>> exp_type_of_col_values(batch, col_type)
     """
+    # Test 1: Ensure the batch is a gx batch object, if not raise the error
+    if not isinstance(batch, gx.datasource.fluent.interfaces.Batch):
+        raise TypeError("batch must be a great expectation batch object.")
+    
+    # Test 2: Ensure the col_type is a dict, if not raise the error
+    if not isinstance(col_type, dict):
+        raise TypeError("col_type must be a dict.")
+    
+    # Test 3: Eunsure the type of col_type's keys is string, if not raise the error
+    for key in col_type:
+            if not isinstance(key, str):
+                raise TypeError("col_type keys must be strings.")
+            
+    # Test 4: Ensure the type of col_type's values is string, if not raise the error
+    for value in col_type.values():
+        if not isinstance(value, str):
+            raise TypeError("col_type values must be strings.")
+
     for i in col_type:
         expectation = gx.expectations.ExpectColumnValuesToBeOfType(
             column=i, type=col_type[i]
@@ -205,8 +248,36 @@ def exp_col_not_null(batch, col_percent):
     >>>     'diagnosis': 1,
     >>>     'mean_radium': 0.3 # No more than 30% of values are nulls
     >>> }
-    >>> exp_col_not_null(batch, col_type)
+    >>> exp_col_not_null(batch, col_percent)
     """
+    # Test 1: Ensure the batch is a gx batch object, if not raise the error
+    if not isinstance(batch, gx.datasource.fluent.interfaces.Batch):
+        raise TypeError("batch must be a great expectation batch object.")
+    
+    # Test 2: Ensure the col_percent is a dict, if not raise the error
+    if not isinstance(col_percent, dict):
+        raise TypeError("col_percent must be a dict.")
+    
+    # Test 3: Eunsure the type of col_percent's keys is string, if not raise the error
+    for key in col_percent:
+            if not isinstance(key, str):
+                raise TypeError("col_percent keys must be strings.")
+            
+    # Test 4: Ensure the type of col_percent's values is numeric value, if not raise the error
+    for value in col_percent.values():
+        if not isinstance(value, float):
+            raise TypeError("col_percent values must be numeric value.")
+    
+    # Test 5: Ensure the value of col_percent is possitive, if not raise the error
+    for value in col_percent.values():
+        if value < 0:
+            raise ValueError("col_percent values must be positive.")
+
+    # Test 6: Ensure the col_percent values are not greater than 1, if not raise the error
+    for value in col_percent.values():
+        if value > 1:
+            raise ValueError("col_percent values must not be greater than 1.")
+    
     for i in col_percent:
         expectation = gx.expectations.ExpectColumnValuesToNotBeNull(
             column=i, mostly=1-col_percent[i]
@@ -218,7 +289,7 @@ def exp_col_not_null(batch, col_percent):
 
 def exp_value_range(batch, col_range):
     """
-    Validates that the numeric values of specified columns are within specific range.
+    Validates that the numeric values of specified columns are within specified range.
     
     Parameters
     ----------
@@ -255,6 +326,49 @@ def exp_value_range(batch, col_range):
     >>> }
     >>> exp_value_range(batch, col_range)
     """
+    # Test 1: Ensure the batch is a gx batch object, if not raise the error
+    if not isinstance(batch, gx.datasource.fluent.interfaces.Batch):
+        raise TypeError("batch must be a great expectation batch object.")
+    
+    # Test 2: Ensure the col_range is a dict, if not raise the error
+    if not isinstance(col_range, dict):
+        raise TypeError("col_range must be a dict.")
+    
+    # Test 3: Eunsure the type of col_range's keys is string, if not raise the error
+    for key in col_range:
+            if not isinstance(key, str):
+                raise TypeError("col_range keys must be strings.")
+            
+    # Test 4: Ensure the type of col_range is a list, if not raise the error
+    for value in col_range.values():
+        if not isinstance(value, list):
+            raise TypeError("col_range must be a list.")
+    
+    # Test 5: Ensure the col_range's value(list) has four values, if not raise the error
+    for value in col_range.values():
+        if len(value) != 4:
+            raise ValueError("Each col_range value list must contain exactly four items.")
+
+    # Test 6: Ensure the first item of col_range's value is numeric, if not raise the error
+    for value in col_range.values():
+        if value[0] is not None and not isinstance(value[0], (int, float)):
+            raise TypeError("The first item in col_range value must be a numeric value or None (min_value).")
+
+    # Test 7: Ensure the second item of col_range's value is numeric, if not raise the error
+    for value in col_range.values():
+        if value[1] is not None and not isinstance(value[1], (int, float)):
+            raise TypeError("The second item in col_range value must be a numeric value or None (max_value).")
+
+    # Test 8: Ensure the third item of col_range's value is boolean, if not raise the error
+    for value in col_range.values():
+        if not isinstance(value[2], bool):
+            raise TypeError("The third item in col_range value must be a boolean value (strict_min).")
+
+    # Test 9: Ensure the fourth item of col_range's value is boolean, if not raise the error
+    for value in col_range.values():
+        if not isinstance(value[3], bool):
+            raise TypeError("The fourth item in col_range value must be a boolean value (strict_max).")
+        
     for i in col_range:
         expectation = gx.expectations.ExpectColumnValuesToNotBeNull(
             column=i, 
