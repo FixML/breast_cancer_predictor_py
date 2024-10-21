@@ -3,16 +3,17 @@ FROM quay.io/jupyter/minimal-notebook:notebook-7.0.6
 
 # install necessary packages for analysis
 RUN conda install -y \
-    python=3.11.6 \
-    altair=5.1.2 \
-    pandas=2.1.2 \
-    ipykernel=6.26.0 \
-    scikit-learn=1.3.2 \
-    requests=2.31.0 \
-    notebook=7.0.6 \
-    pytest=7.4.3 \
-    responses=0.24.1 \
+    python=3.11.7 \
+    altair=5.4.1 \
+    pandas=1.5.3 \
+    ipykernel=6.29.5  \
+    scikit-learn=1.5.2 \
+    requests=2.32.3 \
+    notebook=7.0.8 \
+    pytest=8.3.3 \
+    responses=0.25.3 \
     click=8.1.7 \
-    vl-convert-python=1.1.0 \
-    jupyter-book=0.15.1 \
-    make
+    vl-convert-python=1.7.0 \
+    jupyter-book=1.0.3 \
+    make 
+RUN pip install great-expectations==1.1.3
