@@ -124,6 +124,11 @@ To exit the container type `exit` in the terminal.
 
 ### Running the tests
 Tests are run using the `pytest` command in the root of the project.
+To run them using the project's Docker container you can run:
+
+```
+docker-compose run --rm analysis-env pytest
+```
 More details about the test suite can be found in the 
 [`tests`](tests) directory.
 
