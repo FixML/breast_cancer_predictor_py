@@ -10,13 +10,9 @@ import os
 def extract_column_name(raw_name_file):
     """Extract and clean column names from .names file."""
     
-    # Test 1: Ensure the raw name file exists, if not raise error
+    # Input Validation Checks 1: Ensure the raw name file exists, if not raise error
     if not os.path.exists(raw_name_file):
         raise FileNotFoundError(f"The raw_name file does not exist.")
-    
-    # Test 2: Ensure the raw name file is a .names file, if not raise error
-    if not raw_name_file.endswith('.names'):
-        raise ValueError("The raw_name file must be a .names file.")
     
     # Extracting column names from downloaded raw file
     text_lines = []
@@ -48,23 +44,19 @@ def extract_column_name(raw_name_file):
 def read_raw_data(raw_data, col_name):
     """Read data from .data file."""
 
-    # Test 1: Ensure the raw data file exists, if not raise error
+    # Input Validation Checks 1: Ensure the raw data file exists, if not raise error
     if not os.path.exists(raw_data):
         raise FileNotFoundError(f"The raw_data file does not exist.")
     
-    # Test 2: Ensure the raw_data file's extension is .data', if not raise error
-    if not raw_data.endswith('.data'):
-        raise ValueError("The raw_data file must be a .data file.")
-    
-    # Test 3: Ensure the col_name is a list, if not raise error
+    # Input Validation Checks 2: Ensure the col_name is a list, if not raise error
     if not isinstance(col_name, list):
         raise TypeError("col_name must be a list.")
     
-    # Test 4: Ensure the list has 32 items, if not raise error
+    # Input Validation Checks 3: Ensure the list has 32 items, if not raise error
     if len(col_name) != 32:
         raise ValueError("col_name must contain exactly 32 items.")
     
-    # Test 5: Ensure the list only contains strings, if not raise error
+    # Input Validation Checks 4: Ensure the list only contains strings, if not raise error
     if not all(isinstance(item, str) for item in col_name):
         raise ValueError("col_name must only contain strings.")
     
@@ -73,15 +65,15 @@ def read_raw_data(raw_data, col_name):
 
 def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B' : 'Benign'}):
     """Clean imported data"""
-    # Test 1: Ensure the imported_data is a dataframe
+    # Input Validation Checks 1: Ensure the imported_data is a dataframe
     if not isinstance(imported_data, pd.DataFrame):
         raise TypeError("imported_data must be a data frame.")
     
-    # Test 2: Ensure the drop_columns is a list
+    # Input Validation Checks 2: Ensure the drop_columns is a list
     if not isinstance(drop_columns, list):
         raise TypeError("drop_columns must be a list.")
     
-    # Test 3: Ensure the relabel is a dictionary
+    # Input Validation Checks 3: Ensure the relabel is a dictionary
     if not isinstance(relabel, dict):
         raise TypeError("relabel must be a dictionary")
     
@@ -91,14 +83,14 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
 
 def write_data(cleaned_data, data_to):
     """Write cleaned and validated data to directory"""
-    # Test 1: Ensure the cleaned_data is a dataframe, if not raise an error
+    # Input Validation Checks 1: Ensure the cleaned_data is a dataframe, if not raise an error
     if not isinstance(cleaned_data, pd.DataFrame):
         raise TypeError("cleaned_data must be a data frame.")
     
-    # Test 2: check if the directory path exists, if not raise an error
+    # Input Validation Checks 2: check if the directory path exists, if not raise an error
     if not os.path.exists(data_to):
         raise FileNotFoundError('The directory provided does not exist.')
 
-    # Test 3: check if the dirctory path provided is a directory, if not raise an error
+    # Input Validation Checks 3: check if the dirctory path provided is a directory, if not raise an error
     if not os.path.isdir(data_to):
         raise NotADirectoryError('The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.')

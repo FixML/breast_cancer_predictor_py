@@ -40,12 +40,6 @@ def test_extract_column_name_error_on_missing_file():
     with pytest.raises(FileNotFoundError, match='The raw_name file does not exist.'):
         extract_column_name('tests/test_name_data.name')
 
-# test extract_column_name function throws an error 
-# if the raw name file is not a .names file
-def test_extract_column_name_error_on_wrong_file_type():
-    with pytest.raises(ValueError, match='The raw_name file must be a .names file.'):
-        extract_column_name('tests/empty.zip')
-
 # Tests for read_raw_data
 
 # test read_raw_data function throws an error 
@@ -53,12 +47,6 @@ def test_extract_column_name_error_on_wrong_file_type():
 def test_read_raw_data_error_on_missing_file():
     with pytest.raises(FileNotFoundError, match='The raw_data file does not exist.'):
         read_raw_data('tests/test_raw_data.data',col_name1)
-
-# test read_raw_data function throws an error 
-# if the raw data file is not a .data file
-def test_read_raw_data_error_on_wrong_file_format():
-    with pytest.raises(ValueError, match='The raw_data file must be a .data file.'):
-        read_raw_data('tests/empty.zip', col_name1)
 
 # test read_raw_data function throws an error 
 # if the col_name is not a list
