@@ -24,9 +24,17 @@ def main(cleaned_data, train_data_size, data_to, preprocessor_to, seed):
     np.random.seed(seed)
     set_config(transform_output="pandas")
 
-    cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
+    try:
+        cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
+    except:
+        os.makedirs(data_to)
+        cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
 
-    create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
+    try:
+        create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
+    except:
+        os.makedirs(preprocessor_to)
+        create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
 
 if __name__ == '__main__':
     main()

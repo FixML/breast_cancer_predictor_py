@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer, make_column_selector
 
 def create_save_preprocessor(train_data, test_data, data_to, preprocessor_to):
+    """Create and save preprocess using train and test data"""
     cancer_preprocessor = make_column_transformer(
         (StandardScaler(), make_column_selector(dtype_include='number')),
         remainder='passthrough',
