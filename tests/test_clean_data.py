@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.clean_data import *
+from src.clean_data import extract_column_name,read_raw_data,clean_data,write_data
 
 # Test files setup
 col_name1 = ["col" + str(i) for i in range(32)] # 32 strings

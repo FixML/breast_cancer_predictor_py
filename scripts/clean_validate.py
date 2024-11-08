@@ -13,10 +13,11 @@ from src.validate_data import build_schema_from_csv
 
 @click.command()
 @click.option('--raw-data-file', type=str, help="Path to raw data file")
-@click.option('--name-file', type=str, help="Path to dirctory where names file resides")
+@click.option('--name-file', type=str, help="Path to names file")
+@click.option('--data-config-file', type=str, help="Path to data configuration file")
 @click.option('--write-to', type=str, help="Path to directory where cleaned data will be written to")
 
-def main(raw_data_file, name_file, write_to):
+def main(raw_data_file, name_file, data_config_file, write_to):
     """Clean raw data and validate it."""
     # Extract column names from .names file
     colnames = extract_column_name(name_file)
@@ -28,10 +29,8 @@ def main(raw_data_file, name_file, write_to):
     cleaned_data = clean_data(imported_data)
 
     # Validate cleaned data
-    # Load the CSV config file
-    data_config_file = '/data/processed/data_config.csv'
     # define schema
-    schema = build_schema_from_csv(data_config=data_config_file,expected_columns=colnames)
+    schema = build_schema_from_csv(data_config=data_config_file, expected_columns=colnames)
     schema.validate(cleaned_data)
 
     # Write data to specified directory

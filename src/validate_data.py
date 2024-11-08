@@ -16,10 +16,10 @@ def build_schema_from_csv(data_config, expected_columns):
     
     config_df = pd.read_csv(data_config)
 
-    # Ensure the pandas dataframe has four columns: column,type,max,min
-    required_columns = ['column', 'type', 'min', 'max']
-    if list(config_df.columns) != required_columns:
-        raise ValueError(f"The configuration file must have exactly four columns: 'column', 'type', 'min', 'max'.")
+    # Ensure the pandas dataframe has following columns: column,type,max,min,category
+    required_columns = ['column', 'type', 'min', 'max','category']
+    if required_columns not in list(config_df.columns):
+        raise ValueError(f"The configuration file must have following columns: 'column', 'type', 'min', 'max', 'category'.")
 
     # Ensure the values of 'column' match the column names extracted from name file
     if expected_columns is not None:
@@ -35,6 +35,7 @@ def build_schema_from_csv(data_config, expected_columns):
         column_type = row['type'].strip()    # Strip any spaces
         min_value = row['min'] if pd.notna(row['min']) else None
         max_value = row['max'] if pd.notna(row['max']) else None
+        category_in = row['category'] if pd.notna(row['category']) else None
         
         # Define the correct Pandera data type
         if column_type == 'int':
@@ -52,6 +53,9 @@ def build_schema_from_csv(data_config, expected_columns):
             checks.append(pa.Check.greater_than_or_equal_to(float(min_value)))
         if max_value is not None:
             checks.append(pa.Check.less_than_or_equal_to(float(max_value)))
+        if category_in is not None:
+            category_list = category_in.split(',')
+            checks.append(pa.Check.isin(category_list))
         
         # Add the column schema to the schema dictionary
         schema_dict[column_name] = pa.Column(dtype, checks=checks, nullable=False)
