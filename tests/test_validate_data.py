@@ -19,19 +19,24 @@ column,type,min
 'mean_radius',int,6
 """
 valid_csv_content = """
-column,type,min,max
-'diagnosis',str,,
-'mean_radius',float,6,12
+column,type,min,max,category
+'diagnosis',str,,,"Malignant,Benign"
+'mean_radius',float,6,12,
 """
 
 invalid_colnames = ['diagnosis','mean_texture']
 valid_colnames = ['diagnosis','mean_radius']
 
 valid_data = pd.DataFrame({
-        'id': [1, 2, 3],
-        'class': ['M', 'B', 'M']
+        'diagnosis': ['Malignant','Benign','Malignant'],
+        'mean_radius': [1, 2, 3]
     })
-invalid_data = [1, 2, 3, 4, 5]
+invalid_data_type = [1, 2, 3, 4, 5]
+
+invalid_data = pd.DataFrame({
+        'diagnosis': ['Malignant','Benign','M',5],
+        'mean_radius': [1, 7,'radius', 13]
+        })
 
 # Tests
 
@@ -59,6 +64,11 @@ def test_build_schedma_from_csv_error_on_mismatch_column_names(tmp_path):
 def test_validate_data_error_on_wrong_cleaned_data_format(tmp_path):
     with pytest.raises(TypeError, match="cleaned_data must be a data frame."):
         valid_csv_file = write_temp_csv(valid_csv_content, tmp_path)
-        validate_data(valid_csv_file,invalid_colnames,invalid_data)
+        validate_data(valid_csv_file,valid_colnames,invalid_data_type)
 
 # Tests for Pandera validation function
+def test_validate_data_error_on_invalid_data(tmp_path):
+    """Test schema validation for individual columns with invalid values."""
+    with pytest.raises(pa.errors.SchemaError):
+        valid_csv_file = write_temp_csv(valid_csv_content, tmp_path)
+        validate_data(valid_csv_file,valid_colnames,invalid_data)

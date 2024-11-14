@@ -65,7 +65,7 @@ def validate_data(data_config, expected_columns, dataframe):
         schema_dict[column_name] = pa.Column(dtype, checks=checks, nullable=False)
     
     schema = pa.DataFrameSchema(schema_dict)
-    schema.validate(dataframe)
+    schema.validate(dataframe, lazy=True)
 
 
 

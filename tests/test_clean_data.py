@@ -22,8 +22,8 @@ relabel1={'M' : 'Malignant','B' : 'Benign'}
 relabel2=['M','B']
 
 cleaned_data1 = pd.DataFrame({
-        'id': [1, 2, 3],
-        'class': ['M', 'B', 'M']
+        'diagnosis': ['Malignant','Benign','Malignant'],
+        'mean_raius': [1, 2, 3]
     })
 cleaned_data2 = [1, 2, 3, 4, 5]
 # setup empty directory for data files to be downloaded to
