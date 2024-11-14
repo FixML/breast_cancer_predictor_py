@@ -90,18 +90,23 @@ def test_clean_data_error_on_wrong_relabel_format():
 # Tests for write_data
 
 # test write_data function throws an error
-# if the cleaned_data is not a dataframe
+# if the dataframe is not a dataframe
 def test_write_data_error_on_wrong_cleaned_data_format():
     with pytest.raises(TypeError, match="cleaned_data must be a data frame."):
-        write_data(cleaned_data2, 'tests/test_write_data1')
+        write_data(cleaned_data2, 'tests/', 'test_write_data1')
 
 # test write_data function throws an error 
 # if the write_to path provided does not exist
-def test_read_zip_error_on_nonexistent_dir():
+def test_write_data_error_on_nonexistent_dir():
     with pytest.raises(FileNotFoundError, match='The directory provided does not exist.'):
-        write_data(cleaned_data1, 'tests/test_write_data3')
+        write_data(cleaned_data1, 'test/', 'test_write_data3')
 
 # if the directory path provided is not directory
-def test_read_zip_error_on_missing_dir():
+def test_write_data_error_on_missing_dir():
     with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.'):
-        write_data(cleaned_data1, 'tests/conftest.py')       
+        write_data(cleaned_data1, 'tests/conftest.py')     
+
+# if the name_of_file is not a string
+def test_read_data_error_on_wrong_name_of_file_format():
+    with pytest.raises(TypeError, match='name_of_file must be string.'):
+        write_data(cleaned_data1, 'tests/', 1)

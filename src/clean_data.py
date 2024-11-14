@@ -65,15 +65,15 @@ def read_raw_data(raw_data, col_name):
 
 def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B' : 'Benign'}):
     """Clean imported data"""
-    # Input Validation Checks 1: Ensure the imported_data is a dataframe
+    # Ensure the imported_data is a dataframe
     if not isinstance(imported_data, pd.DataFrame):
         raise TypeError("imported_data must be a data frame.")
     
-    # Input Validation Checks 2: Ensure the drop_columns is a list
+    # Ensure the drop_columns is a list
     if not isinstance(drop_columns, list):
         raise TypeError("drop_columns must be a list.")
     
-    # Input Validation Checks 3: Ensure the relabel is a dictionary
+    # Ensure the relabel is a dictionary
     if not isinstance(relabel, dict):
         raise TypeError("relabel must be a dictionary")
     
@@ -81,16 +81,22 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
     cleaned_data['diagnosis'] = cleaned_data['diagnosis'].replace(relabel)
     return cleaned_data
 
-def write_data(cleaned_data, data_to):
+def write_data(dataframe, data_to, name_of_file):
     """Write cleaned and validated data to directory"""
-    # Input Validation Checks 1: Ensure the cleaned_data is a dataframe, if not raise an error
-    if not isinstance(cleaned_data, pd.DataFrame):
-        raise TypeError("cleaned_data must be a data frame.")
+    # Ensure the data_frame is a dataframe, if not raise an error
+    if not isinstance(dataframe, pd.DataFrame):
+        raise TypeError("dataframe must be a pandas data frame.")
     
-    # Input Validation Checks 2: check if the directory path exists, if not raise an error
+    # Ensure directory path exists, if not raise an error
     if not os.path.exists(data_to):
         raise FileNotFoundError('The directory provided does not exist.')
 
-    # Input Validation Checks 3: check if the dirctory path provided is a directory, if not raise an error
+    # Ensure the dirctory path provided is a directory, if not raise an error
     if not os.path.isdir(data_to):
         raise NotADirectoryError('The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.')
+    
+    # Ensure the name of file is string, if not raise an error
+    if not isinstance(name_of_file, str):
+        raise TypeError("name_of_file must be string.")
+    
+    dataframe.to_csv(os.path.join(data_to, name_of_file), index=False)

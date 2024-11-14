@@ -7,10 +7,10 @@ import pandera as pa
 import os
 
 # Function to build schema from the config file
-def build_schema_from_csv(data_config, expected_columns):
+def validate_data(data_config, expected_columns, dataframe):
     """Building schema to validate data using pandera"""
 
-    # Input Validation Checks 1: Ensure the data_config file exists, if not raise error
+    # Ensure the data_config file exists, if not raise error
     if not os.path.exists(data_config):
         raise FileNotFoundError(f"The data_config file does not exist.")
     
@@ -26,6 +26,10 @@ def build_schema_from_csv(data_config, expected_columns):
         actual_columns = config_df['column'].str.strip("'").tolist()  # Clean up any extra quotation marks in 'column'
         if set(actual_columns) != set(expected_columns):
             raise ValueError("Column names in the config file do not match the expected columns.")
+    
+    # Ensure the data_frame is a dataframe, if not raise an error
+    if not isinstance(dataframe, pd.DataFrame):
+        raise TypeError("dataframe must be a pandas data frame.")
 
     schema_dict = {}
     
@@ -60,8 +64,8 @@ def build_schema_from_csv(data_config, expected_columns):
         # Add the column schema to the schema dictionary
         schema_dict[column_name] = pa.Column(dtype, checks=checks, nullable=False)
     
-    # Return the DataFrameSchema object
-    return pa.DataFrameSchema(schema_dict)
+    schema = pa.DataFrameSchema(schema_dict)
+    schema.validate(dataframe)
 
 
 
