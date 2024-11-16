@@ -7,34 +7,30 @@ import pandera as pa
 import os
 
 # Function to build schema from the config file
-def validate_data(data_config, expected_columns, dataframe):
-    """Building schema to validate data using pandera"""
+def build_schema_from_csv(data_config, expected_columns):
+    """Building schema for validation"""
 
-    # Ensure the data_config file exists, if not raise error
-    if not os.path.exists(data_config):
-        raise FileNotFoundError(f"The data_config file does not exist.")
+    # Ensure the data_config is a pandas dataframe
+    if not isinstance(data_config, pd.DataFrame):
+        raise TypeError("data_config must be a pandas dataframe.")
     
-    config_df = pd.read_csv(data_config)
-
-    # Ensure the pandas dataframe has following columns: column,type,max,min,category
+    # Ensure the data_config has following columns: column,type,max,min,category
     required_columns = ['column', 'type', 'min', 'max','category']
-    if required_columns not in list(config_df.columns):
-        raise ValueError(f"The configuration file must have following columns: 'column', 'type', 'min', 'max', 'category'.")
+    missing_columns = [col for col in required_columns if col not in data_config.columns]
+    if missing_columns:
+        raise ValueError(f"The data_config must have following columns: 'column', 'type', 'min', 'max', 'category'.")
 
     # Ensure the values of 'column' match the column names extracted from name file
     if expected_columns is not None:
-        actual_columns = config_df['column'].str.strip("'").tolist()  # Clean up any extra quotation marks in 'column'
+        actual_columns = data_config['column'].str.strip("'").tolist()  # Clean up any extra quotation marks in 'column'
         if set(actual_columns) != set(expected_columns):
             raise ValueError("Column names in the config file do not match the expected columns.")
     
-    # Ensure the data_frame is a dataframe, if not raise an error
-    if not isinstance(dataframe, pd.DataFrame):
-        raise TypeError("dataframe must be a pandas data frame.")
 
     schema_dict = {}
     
     # Loop through each row in the config DataFrame
-    for _, row in config_df.iterrows():
+    for _, row in data_config.iterrows():
         column_name = row['column'].strip()  # Removing potential extra spaces
         column_type = row['type'].strip()    # Strip any spaces
         min_value = row['min'] if pd.notna(row['min']) else None
@@ -64,7 +60,21 @@ def validate_data(data_config, expected_columns, dataframe):
         # Add the column schema to the schema dictionary
         schema_dict[column_name] = pa.Column(dtype, checks=checks, nullable=False)
     
-    schema = pa.DataFrameSchema(schema_dict)
+    return pa.DataFrameSchema(schema_dict)
+    
+
+# Function to validate schema
+def validate_data(schema, dataframe):
+    """Building schema to validate data using pandera"""
+
+    # Ensure the schema is a pandera schema, if not raise an error
+    if not isinstance(schema, pa.DataFrameSchema):
+        raise TypeError("schema must be a pandera dataframe schema.")
+    
+    # Ensure the data_frame is a dataframe, if not raise an error
+    if not isinstance(dataframe, pd.DataFrame):
+        raise TypeError("dataframe must be a pandas data frame.")
+    
     schema.validate(dataframe, lazy=True)
 
 

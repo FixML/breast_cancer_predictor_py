@@ -10,7 +10,7 @@ import os
 def extract_column_name(raw_name_file):
     """Extract and clean column names from .names file."""
     
-    # Input Validation Checks 1: Ensure the raw name file exists, if not raise error
+    # Ensure the raw name file exists, if not raise error
     if not os.path.exists(raw_name_file):
         raise FileNotFoundError(f"The raw_name file does not exist.")
     
@@ -41,22 +41,22 @@ def extract_column_name(raw_name_file):
         
     return colnames
     
-def read_raw_data(raw_data, col_name):
-    """Read data from .data file."""
+def read_data(raw_data, col_name):
+    """Read data from .data or .csv file."""
 
-    # Input Validation Checks 1: Ensure the raw data file exists, if not raise error
+    # Ensure the raw data file exists, if not raise error
     if not os.path.exists(raw_data):
         raise FileNotFoundError(f"The raw_data file does not exist.")
     
-    # Input Validation Checks 2: Ensure the col_name is a list, if not raise error
+    # Ensure the col_name is a list, if not raise error
     if not isinstance(col_name, list):
         raise TypeError("col_name must be a list.")
     
-    # Input Validation Checks 3: Ensure the list has 32 items, if not raise error
+    # Ensure the list has 32 items, if not raise error
     if len(col_name) != 32:
         raise ValueError("col_name must contain exactly 32 items.")
     
-    # Input Validation Checks 4: Ensure the list only contains strings, if not raise error
+    # Ensure the list only contains strings, if not raise error
     if not all(isinstance(item, str) for item in col_name):
         raise ValueError("col_name must only contain strings.")
     
@@ -82,7 +82,7 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
     return cleaned_data
 
 def write_data(dataframe, data_to, name_of_file):
-    """Write cleaned and validated data to directory"""
+    """Write data to directory"""
     # Ensure the data_frame is a dataframe, if not raise an error
     if not isinstance(dataframe, pd.DataFrame):
         raise TypeError("dataframe must be a pandas data frame.")

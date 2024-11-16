@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.clean_data import extract_column_name,read_raw_data,clean_data,write_data
+from src.clean_data import extract_column_name,read_data,clean_data,write_data
 
 # Test files setup
 col_name1 = ["col" + str(i) for i in range(32)] # 32 strings
@@ -40,31 +40,31 @@ def test_extract_column_name_error_on_missing_file():
     with pytest.raises(FileNotFoundError, match='The raw_name file does not exist.'):
         extract_column_name('tests/test_name_data.name')
 
-# Tests for read_raw_data
+# Tests for read_data
 
-# test read_raw_data function throws an error 
+# test read_data function throws an error 
 # if the raw data file does not exist
-def test_read_raw_data_error_on_missing_file():
+def test_read_data_error_on_missing_file():
     with pytest.raises(FileNotFoundError, match='The raw_data file does not exist.'):
-        read_raw_data('tests/test_raw_data.data',col_name1)
+        read_data('tests/test_data.data',col_name1)
 
-# test read_raw_data function throws an error 
+# test read_data function throws an error 
 # if the col_name is not a list
-def test_read_raw_data_error_on_non_list():
+def test_read_data_error_on_non_list():
     with pytest.raises(TypeError, match="col_name must be a list."):
-        read_raw_data('tests/test_wdbc.data',col_name2)
+        read_data('tests/test_wdbc.data',col_name2)
 
-# test read_raw_data function throws an error 
+# test read_data function throws an error 
 # if the col_name does not have 32 values
-def test_read_raw_data_error_on_insufficient_list_item():
+def test_read_data_error_on_insufficient_list_item():
     with pytest.raises(ValueError, match="col_name must contain exactly 32 items."):
-        read_raw_data('tests/test_wdbc.data', col_name3)
+        read_data('tests/test_wdbc.data', col_name3)
 
-# test read_raw_data function throws an error 
+# test read_data function throws an error 
 # if the col_name contains items other than string
-def test_read_raw_data_error_on_wrong_item_type():
+def test_read_data_error_on_wrong_item_type():
     with pytest.raises(ValueError, match="col_name must only contain strings."):
-        read_raw_data('tests/test_wdbc.data', col_name4)
+        read_data('tests/test_wdbc.data', col_name4)
 
 # Tests for clean_data
 
@@ -92,19 +92,19 @@ def test_clean_data_error_on_wrong_relabel_format():
 # test write_data function throws an error
 # if the dataframe is not a dataframe
 def test_write_data_error_on_wrong_cleaned_data_format():
-    with pytest.raises(TypeError, match="cleaned_data must be a data frame."):
+    with pytest.raises(TypeError, match="dataframe must be a pandas data frame."):
         write_data(cleaned_data2, 'tests/', 'test_write_data1')
 
 # test write_data function throws an error 
 # if the write_to path provided does not exist
 def test_write_data_error_on_nonexistent_dir():
     with pytest.raises(FileNotFoundError, match='The directory provided does not exist.'):
-        write_data(cleaned_data1, 'test/', 'test_write_data3')
+        write_data(cleaned_data1, 'test/', 'test_write_data2')
 
 # if the directory path provided is not directory
 def test_write_data_error_on_missing_dir():
     with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.'):
-        write_data(cleaned_data1, 'tests/conftest.py')     
+        write_data(cleaned_data1, 'tests/conftest.py','test_write_data3')     
 
 # if the name_of_file is not a string
 def test_read_data_error_on_wrong_name_of_file_format():

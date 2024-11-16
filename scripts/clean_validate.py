@@ -9,7 +9,7 @@ import pandas as pd
 import pandera as pa
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.clean_data import extract_column_name, read_raw_data, clean_data, write_data
-from src.validate_data import validate_data
+from src.validate_data import build_schema_from_csv, validate_data
 
 @click.command()
 @click.option('--raw-data-file', type=str, help="Path to raw data file")
@@ -29,9 +29,13 @@ def main(raw_data_file, name_file, data_config_file, write_to, written_file_name
     # Removing id column and relabel diagnosis column
     cleaned_data = clean_data(imported_data)
 
+    
+    # Create schema
+    config_df = pd.read_csv(data_config_file)
+    
+    schema=build_schema_from_csv(data_config=config_df, expected_columns=colnames, dataframe=cleaned_data)
     # Validate cleaned data
-
-    validate_data(data_config=data_config_file, expected_columns=colnames, dataframe=cleaned_data)
+    validate_data(schema=schema, dataframe=cleaned_data)
 
     # Write data to specified directory
     write_data(cleaned_data, write_to, written_file_name)
