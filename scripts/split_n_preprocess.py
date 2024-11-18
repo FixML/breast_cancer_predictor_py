@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn import set_config
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.split_train_test import split_train_test_data
+from src.split_train_test import split_train_test_data, validate_split_data
 from src.clean_data import write_data
 from src.preprocessor import create_save_preprocessor
 
@@ -27,7 +27,9 @@ def main(cleaned_data, train_data_size, data_to, preprocessor_to, seed):
     set_config(transform_output="pandas")
 
     cleaned_data = pd.read_csv(cleaned_data)
-    cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, stratify_by=cleaned_data["diagnosis"])
+    cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, 
+                                                      stratify_by=cleaned_data["diagnosis"])
+    validate_split_data(cancer_train, cancer_test)
 
     try:
         write_data(cancer_train, data_to)
