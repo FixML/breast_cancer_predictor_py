@@ -64,8 +64,8 @@ colnames = extract_column_name('tests/test_wdbc.names')[1:] #removing column nam
 valid_schema = build_schema_from_csv(data_config=data_config_df,expected_columns=colnames)
 invalid_schema = [1]
 
-valid_data = pd.read_csv('tests/test_cleaned_data.csv').iloc[0:5]
-invalid_data = pd.read_csv('tests/test_cleaned_data.csv').iloc[5:]
+valid_data = pd.read_csv('tests/test_cleaned_data.csv').iloc[10:]
+invalid_data = pd.read_csv('tests/test_cleaned_data.csv').iloc[:10]
 
 def test_validate_data_error_on_invalid_schema_type():
     with pytest.raises(TypeError, match='schema must be a pandera dataframe schema.'):
