@@ -5,6 +5,7 @@
 import click
 import os
 import numpy as np
+import pandas as pd
 from sklearn import set_config
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.split_train_test import split_train_test_data
@@ -23,6 +24,8 @@ def main(cleaned_data, train_data_size, data_to, preprocessor_to, seed):
     It also saves the preprocessor to be used in the model training script.'''
     np.random.seed(seed)
     set_config(transform_output="pandas")
+
+    cleaned_data = pd.read_csv(cleaned_data) # put in the script
 
     try:
         cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
