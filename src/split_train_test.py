@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from deepchecks.tabular import Dataset
 from deepchecks.tabular.checks import DatasetsSizeComparison, TrainTestSamplesMix, MultivariateDrift, LabelDrift, FeatureDrift
-# from src.clean_data import write_data
 
 def split_train_test_data(cleaned_data, train_data_size, stratify_by=None):
     """Split train test data using cleaned data"""
@@ -62,7 +61,7 @@ def split_train_test_data(cleaned_data, train_data_size, stratify_by=None):
     multivariate_drift_check = check.run(train_dataset=cancer_train, test_dataset=cancer_test)
     drift_score = multivariate_drift_check.reduce_output()
     if multivariate_drift_check.passed_conditions():
-        raise ValueError(f"Drift score above threshold: {drift_score['Feature Drift Score']} vs "
+        raise ValueError(f"Drift score above threshold: {drift_score['Multivariate Drift Score']} vs "
         f"{0.4}"
         )
     

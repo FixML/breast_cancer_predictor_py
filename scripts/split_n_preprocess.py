@@ -9,11 +9,12 @@ import pandas as pd
 from sklearn import set_config
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.split_train_test import split_train_test_data
+from src.clean_data import write_data
 from src.preprocessor import create_save_preprocessor
 
 @click.command()
 @click.option('--cleaned-data', type=str, help="Path to cleaned data")
-@click.option('--train-data-size', type=str, help="Proportion of the dataset to include in the train split")
+@click.option('--train-data-size', type=str, help="Size of the dataset to include in the train split")
 @click.option('--data-to', type=str, help="Path to directory where processed data will be written to")
 @click.option('--preprocessor-to', type=str, help="Path to directory where the preprocessor object will be written to")
 @click.option('--seed', type=int, help="Random seed", default=123)
@@ -25,13 +26,16 @@ def main(cleaned_data, train_data_size, data_to, preprocessor_to, seed):
     np.random.seed(seed)
     set_config(transform_output="pandas")
 
-    cleaned_data = pd.read_csv(cleaned_data) # put in the script
+    cleaned_data = pd.read_csv(cleaned_data)
+    cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, stratify_by=cleaned_data["diagnosis"])
 
     try:
-        cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
+        write_data(cancer_train, data_to)
+        write_data(cancer_test, data_to)
     except:
         os.makedirs(data_to)
-        cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, data_to)
+        write_data(cancer_train, data_to)
+        write_data(cancer_test, data_to)
 
     try:
         create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
