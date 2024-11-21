@@ -28,7 +28,8 @@ def extract_column_name(raw_name_file):
         pattern = re.compile(r'^[1-9a-z]\)\s*')
         text_lines = [item for item in text_lines if pattern.match(item)]
         text_lines = [pattern.sub('', item) for item in text_lines]
-        text_lines = [item.split()[0].lower() for item in text_lines]
+        pattern = re.compile(r'\(.*?\)')
+        text_lines = [re.sub(r"\s+", "_", pattern.sub('', item).strip()) for item in text_lines]
 
         statistics = ['mean','se','max'] 
         #se is standard error, and max is the worst or largest (mean of three largest values)
