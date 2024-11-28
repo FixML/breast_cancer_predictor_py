@@ -36,6 +36,7 @@ def build_schema_from_csv(data_config, expected_columns):
         min_value = row['min'] if pd.notna(row['min']) else None
         max_value = row['max'] if pd.notna(row['max']) else None
         category_in = row['category'] if pd.notna(row['category']) else None
+        max_nullable = row['max_nullable'] if pd.notna(row['max_nullable']) else None
         
         # Define the correct Pandera data type
         if column_type == 'int':
@@ -47,21 +48,32 @@ def build_schema_from_csv(data_config, expected_columns):
         else:
             raise ValueError(f"Unsupported column type: {column_type}")
         
-        # Create validation checks
-        checks = []
+        # Create value range validation checks
+        value_range_checks = []
         if min_value is not None:
-            checks.append(pa.Check.greater_than_or_equal_to(float(min_value)))
+            value_range_checks.append(pa.Check.greater_than_or_equal_to(float(min_value),
+                                                                        error=f'Value is smaller than {min_value}'))
         if max_value is not None:
-            checks.append(pa.Check.less_than_or_equal_to(float(max_value)))
+            value_range_checks.append(pa.Check.less_than_or_equal_to(float(max_value),
+                                                                     error=f'Value is larger than {max_value}'))
         if category_in is not None:
             category_list = category_in.split(',')
-            checks.append(pa.Check.isin(category_list))
+            value_range_checks.append(pa.Check.isin(category_list,
+                                                    error=f'Value not in {category_list}'))
+        if max_nullable is not None:
+            value_range_checks.append(pa.Check(lambda s: s.isna().mean() <= max_nullable,
+                                               error=f'Too many missing values, must have at least {(1-max_nullable)*100}% non-null values.'))
         
         # Add the column schema to the schema dictionary
-        schema_dict[column_name] = pa.Column(dtype, checks=checks, nullable=False)
+        schema_dict[column_name] = pa.Column(dtype,nullable=True, checks=value_range_checks)
+
+        global_checks=[
+        pa.Check(lambda df: ~df.duplicated().any(), error="Duplicate rows found."),
+        pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error="Empty rows found.")
+        ]
     
-    return pa.DataFrameSchema(schema_dict)
-    
+    return pa.DataFrameSchema(schema_dict, checks=global_checks)
+   
 
 # Function to validate schema
 def validate_data(schema, dataframe):

@@ -33,7 +33,7 @@ def main(raw_data_file, name_file, data_config_file, write_to, written_file_name
     # Create schema
     config_df = pd.read_csv(data_config_file)
     
-    schema=build_schema_from_csv(data_config=config_df, expected_columns=colnames, dataframe=cleaned_data)
+    schema=build_schema_from_csv(data_config=config_df, expected_columns=colnames[1:]) #removing id colnames list
     # Validate cleaned data
     validate_data(schema=schema, dataframe=cleaned_data)
 
