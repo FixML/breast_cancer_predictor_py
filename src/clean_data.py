@@ -39,6 +39,7 @@ def extract_column_name(raw_name_file):
         for stat in statistics:
             for feature in text_lines[2:]:
                 colnames.append(stat+'_'+feature)
+        colnames = [col.lower() for col in colnames]
         
     return colnames
     
