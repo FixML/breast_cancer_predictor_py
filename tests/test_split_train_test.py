@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.split_train_test import split_train_test_data, validate_split_data
 
 # Test setup
+np.random.seed(42)
 invalid_data_type = [1,2,3]
 
 valid_data = pd.read_csv('tests/test_cleaned_data.csv')
@@ -29,13 +30,17 @@ data_test3.loc[70:,'diagnosis']='Malignant'
 # sample datasets for Feature Drift Check
 data_train4 = valid_data.iloc[:50]
 data_test4 = valid_data.iloc[50:]
-data_test4['mean_radius'] = data_test4['mean_radius'].astype('float') + np.random.normal(100, 300, 50)
+data_test4['mean_radius'] = data_test4['mean_radius'].astype('float') + np.random.normal(100, 300, len(data_test4))
 
 # sample datasets for Multivariate Drift Check
 data_train5 = valid_data.iloc[:70]
 data_test5 = valid_data.iloc[70:]
-
-
+data_test5["mean_texture"] = 9 + ((data_test5["mean_radius"] - 6) / 34) * (50 - 9)  
+data_test5["mean_texture"] += np.random.uniform(-1, 1, len(data_test5))  
+data_test5["mean_perimeter"] = 40 + ((data_test5["mean_area"] - 140) / (4300 - 140)) * (260 - 40) 
+data_test5["mean_perimeter"] += np.random.uniform(-5, 5, len(data_test5))  
+data_test5["mean_smoothness"] = 0.1 + 0.9 * (2 - data_test5["mean_compactness"])  
+data_test5["mean_smoothness"] += np.random.uniform(-0.02, 0.02, len(data_test5))  
 
 # Tests
 
