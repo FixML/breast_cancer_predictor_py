@@ -16,34 +16,25 @@ valid_data = pd.read_csv('tests/test_cleaned_data.csv')
 # sample datasets for Datasets Size Comparison Check
 data_train1 = valid_data.iloc[:90]
 data_test1 = valid_data.iloc[90:]
-# data_train1 = Dataset(data_train1,features=valid_data.columns[1:],label=valid_data.columns[0])
-# data_test1 = Dataset(data_test1,features=valid_data.columns[1:],label=valid_data.columns[0])
 
 # sample datasets for Samples Mix Check
 data_train2 = valid_data.iloc[:70]
 data_test2 = valid_data.iloc[60:]
-# data_train2 = Dataset(data_train2,features=valid_data.columns[1:],label=valid_data.columns[0])
-# data_test2 = Dataset(data_test2,features=valid_data.columns[1:],label=valid_data.columns[0])
 
 # sample datasets for Label Drift Check
 data_train3 = valid_data.iloc[:70]
 data_test3 = valid_data.iloc[70:]
-data_test3.loc[70:90,'diagnosis']='Malignant'
-# data_train3 = Dataset(data_train3,features=valid_data.columns[1:],label=valid_data.columns[0])
-# data_test3 = Dataset(data_test3,features=valid_data.columns[1:],label=valid_data.columns[0])
+data_test3.loc[70:,'diagnosis']='Malignant'
 
 # sample datasets for Feature Drift Check
-data_train4 = valid_data.iloc[:70]
-data_test4 = valid_data.iloc[70:]
-data_test4['mean_radius'] = data_test4['mean_radius'].astype('float') + np.random.normal(100, 300, 30)
-# data_train4 = Dataset(data_train4,features=valid_data.columns[1:],label=valid_data.columns[0])
-# data_test4 = Dataset(data_test4,features=valid_data.columns[1:],label=valid_data.columns[0])
+data_train4 = valid_data.iloc[:50]
+data_test4 = valid_data.iloc[50:]
+data_test4['mean_radius'] = data_test4['mean_radius'].astype('float') + np.random.normal(100, 300, 50)
 
 # sample datasets for Multivariate Drift Check
 data_train5 = valid_data.iloc[:70]
 data_test5 = valid_data.iloc[70:]
-# data_train5 = Dataset(data_train5,features=valid_data.columns[1:],label=valid_data.columns[0])
-# data_test5 = Dataset(data_test5,features=valid_data.columns[1:],label=valid_data.columns[0])
+
 
 
 # Tests
@@ -51,8 +42,19 @@ data_test5 = valid_data.iloc[70:]
 # test split_train_test function throws an error
 # if the cleaned_data is not a dataframe
 def test_split_train_test_data_error_on_wrong_data_type():
-    with pytest.raises(TypeError, match="cleaned_data must be a pandas dataframe."):
+    with pytest.raises(TypeError, match="The cleaned_data must be a pandas DataFrame."):
         split_train_test_data(cleaned_data=invalid_data_type, train_data_size=0.3)
+
+# if the train_data_size is not a valid portion
+def test_split_train_test_data_error_on_invalid_train_size():
+    with pytest.raises(ValueError, match="train_data_size must be a float between 0 and 1."):
+        split_train_test_data(cleaned_data=valid_data, train_data_size=1.5)
+
+# if the stratify_by column is not in the cleaned_data
+def test_split_train_test_data_error_on_invalid_stratify_column():
+    with pytest.raises(KeyError, match="The column 'invalid_column' does not exist in the cleaned_data."):
+        split_train_test_data(cleaned_data=valid_data, train_data_size=0.8, stratify_by="invalid_column")
+
 
 # test validate_split_data function throws an error
 # if the Datasets Size Comparison Check failed
@@ -67,15 +69,15 @@ def test_validate_split_data_error_on_sample_mix():
 
 # if Label Drift Check failed
 def test_validate_split_data_error_on_label_drift():
-    with pytest.raises(ValueError, match="Drift score above threshold: 0.2"):
+    with pytest.raises(ValueError, match="Label drift score above threshold: 0.4"):
         validate_split_data(data_train=data_train3,data_test=data_test3)
 
 # if Feature Drift Check failed
 def test_validate_split_data_error_on_feature_drift():
-    with pytest.raises(ValueError, match="Drift score above threshold: 0.4"):
+    with pytest.raises(ValueError, match="Feature drift score above threshold: 0.4"):
         validate_split_data(data_train=data_train4,data_test=data_test4)
 
 # if Multivariate Drift Check failed
 def test_validate_split_data_error_on_multivariate_drift():
-    with pytest.raises(ValueError, match="Drift score above threshold: 0.4"):
+    with pytest.raises(ValueError, match="Multivariate drift score above threshold: 0.4"):
         validate_split_data(data_train=data_train5,data_test=data_test5)

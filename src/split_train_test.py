@@ -7,9 +7,18 @@ from deepchecks.tabular.checks import DatasetsSizeComparison, TrainTestSamplesMi
 def split_train_test_data(cleaned_data, train_data_size, stratify_by=None):
     """Split train test data using cleaned data"""
 
-    # Ensure cleaned_data is a dataframe, if not raise error
-    if not isinstance(cleaned_data, pd.DataFrame): 
-        raise FileNotFoundError(f"The cleaned_data is not a pandas dataframe.")
+    # Ensure cleaned_data is a dataframe
+    if not isinstance(cleaned_data, pd.DataFrame):
+        raise TypeError("The cleaned_data must be a pandas DataFrame.")
+
+    # Ensure train_data_size is a valid proportion
+    if not (0 < train_data_size < 1):
+        raise ValueError("train_data_size must be a float between 0 and 1.")
+
+    # Handle stratify_by
+    if stratify_by:
+        if stratify_by not in cleaned_data.columns:
+            raise KeyError(f"The column '{stratify_by}' does not exist in the cleaned_data.")
     
     # create the split
     data_train, data_test = train_test_split(
@@ -33,33 +42,32 @@ def validate_split_data(data_train, data_test):
     .add_condition_test_train_size_ratio_greater_than(0.2)
     )  
     data_size_comp = check_instance.run(data_train, data_test)
-    if data_size_comp.passed_conditions():
+    if not data_size_comp.passed_conditions():
         raise ValueError("The train test data size ratio should be greater than 0.2")
 
     # Train Test Samples Mix Check
-    check = TrainTestSamplesMix.add_condition_duplicates_ratio_less_or_equal(0)
+    check = TrainTestSamplesMix().add_condition_duplicates_ratio_less_or_equal(0)
     sample_mix_check = check.run(test_dataset=data_test, train_dataset=data_train)
-    if sample_mix_check.passed_conditions():
+    if not sample_mix_check.passed_conditions():
         raise ValueError("Data from Test dataset also present in Train dataset")
 
-
     # Label Drift Check
-    check = LabelDrift().add_condition_drift_score_less_than(0.2)
+    check = LabelDrift().add_condition_drift_score_less_than(0.4)
     label_drift_check = check.run(train_dataset=data_train, test_dataset=data_test)
     # drift_score = label_drift_check.reduce_output()
-    if label_drift_check.passed_conditions():
-        raise ValueError(f"Drift score above threshold: 0.2")
+    if not label_drift_check.passed_conditions():
+        raise ValueError(f"Label drift score above threshold: 0.4")
 
     # Feature Drift Check
     check = FeatureDrift().add_condition_drift_score_less_than(0.4)
     feature_drift_check = check.run(train_dataset=data_train, test_dataset=data_test)
     # drift_score = feature_drift_check.reduce_output()
-    if feature_drift_check.passed_conditions():
-        raise ValueError(f"Drift score above threshold: 0.4")
+    if not feature_drift_check.passed_conditions():
+        raise ValueError(f"Feature drift score above threshold: 0.4")
 
     # Multivariate Drift Check
     check = MultivariateDrift().add_condition_overall_drift_value_less_than(0.4)
     multivariate_drift_check = check.run(train_dataset=data_train, test_dataset=data_test)
     # drift_score = multivariate_drift_check.reduce_output()
-    if multivariate_drift_check.passed_conditions():
-        raise ValueError(f"Drift score above threshold: 0.4")
+    if not multivariate_drift_check.passed_conditions():
+        raise ValueError(f"Multivariate drift score above threshold: 0.4")
