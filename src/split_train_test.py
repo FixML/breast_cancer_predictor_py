@@ -37,18 +37,18 @@ def validate_split_data(data_train, data_test):
         raise ValueError("The train test data size ratio should be greater than 0.2")
 
     # Train Test Samples Mix Check
-    check = TrainTestSamplesMix()
+    check = TrainTestSamplesMix.add_condition_duplicates_ratio_less_or_equal(0)
     sample_mix_check = check.run(test_dataset=data_test, train_dataset=data_train)
     if sample_mix_check.passed_conditions():
         raise ValueError("Data from Test dataset also present in Train dataset")
 
 
     # Label Drift Check
-    check = LabelDrift().add_condition_drift_score_less_than(0.4)
+    check = LabelDrift().add_condition_drift_score_less_than(0.2)
     label_drift_check = check.run(train_dataset=data_train, test_dataset=data_test)
     # drift_score = label_drift_check.reduce_output()
     if label_drift_check.passed_conditions():
-        raise ValueError(f"Drift score above threshold: 0.4")
+        raise ValueError(f"Drift score above threshold: 0.2")
 
     # Feature Drift Check
     check = FeatureDrift().add_condition_drift_score_less_than(0.4)
@@ -58,7 +58,7 @@ def validate_split_data(data_train, data_test):
         raise ValueError(f"Drift score above threshold: 0.4")
 
     # Multivariate Drift Check
-    check = MultivariateDrift().add_condition_drift_score_less_than(0.4)
+    check = MultivariateDrift().add_condition_overall_drift_value_less_than(0.4)
     multivariate_drift_check = check.run(train_dataset=data_train, test_dataset=data_test)
     # drift_score = multivariate_drift_check.reduce_output()
     if multivariate_drift_check.passed_conditions():
