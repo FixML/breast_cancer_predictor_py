@@ -6,18 +6,20 @@ import pandas as pd
 import pandera as pa
 
 # Function to build schema from the config file
-def build_schema_from_csv(data_config, expected_columns):
+def build_schema_from_DataFrame(data_config, expected_columns):
     """Building schema for validation"""
 
     # Ensure the data_config is a pandas dataframe
     if not isinstance(data_config, pd.DataFrame):
         raise TypeError("data_config must be a pandas dataframe.")
     
-    # Ensure the data_config has following columns: column,type,max,min,category
+    # Ensure the data_config has following columns: column,type,max,min,category,max_nullable
     required_columns = ['column', 'type', 'min', 'max','category', 'max_nullable']
-    missing_columns = [col for col in required_columns if col not in data_config.columns]
-    if missing_columns:
-        raise ValueError(f"The data_config must have following columns: 'column', 'type', 'min', 'max', 'category', 'max_nullable'.")
+    if data_config.empty:
+        raise ValueError("The data_config must contain at least one row.")
+    
+    if set(data_config.columns) != expected_columns or data_config.shape[1] != 6:
+        raise ValueError("The data_config must have following columns: 'column', 'type', 'min', 'max', 'category', 'max_nullable'.")
 
     # Ensure the values of 'column' match the column names extracted from name file
     if expected_columns is not None:
@@ -85,14 +87,6 @@ def validate_data(schema, dataframe):
     # Ensure the data_frame is a dataframe, if not raise an error
     if not isinstance(dataframe, pd.DataFrame):
         raise TypeError("dataframe must be a pandas data frame.")
-
-    # Ensure the data_frame has observations, if not raise an error
-    if dataframe.empty:
-        raise ValueError("dataframe must contain observations.")
     
     schema.validate(dataframe, lazy=True)
-    # return print(f"Expected Columns:  {expected_columns}, Actual Columns:  {actual_columns}")
-
-
-
 

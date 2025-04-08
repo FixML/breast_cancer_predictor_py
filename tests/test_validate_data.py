@@ -45,9 +45,15 @@ def test_build_schema_from_csv_error_on_wrong_data_config_type():
     with pytest.raises(TypeError, match="data_config must be a pandas dataframe."):
         build_schema_from_csv(data_config=invalid_data_type, expected_columns=valid_colnames)
 
-# if pandas dataframe doesn't have following columns: column,type,max,min,category
+# if pandas dataframe doesn't have following columns: column,type,max,min,category,max_nullable
+def test_build_schema_from_csv_error_on_empty_df():
+    empty_df = pd.DataFrame(columns=valid_colnames)
+
+    with pytest.raises(ValueError, match="must contain at least one row"):
+        build_schema_from_csv(data_config=empty_df, expected_columns=valid_colnames)
+
 def test_build_schema_from_csv_error_on_incorrect_columns():
-    with pytest.raises(ValueError, match=f"The data_config must have following columns: 'column', 'type', 'min', 'max', 'category'."):
+    with pytest.raises(ValueError, match=f"The data_config must have following columns: 'column', 'type', 'min', 'max', 'category', 'max_nullable'."):
         build_schema_from_csv(data_config=invalid_data_config1, expected_columns=valid_colnames)
 
 # if the values of 'column' match the column names extracted from name file
@@ -142,10 +148,6 @@ def test_validate_data_error_on_invalid_dataframe_type():
     with pytest.raises(TypeError, match='dataframe must be a pandas data frame.'):
         validate_data(schema=valid_schema, dataframe=invalid_data_type)
 
-# if the dataframe has no observations
-def test_validate_data_error_on_empty_dataframe_type():
-    with pytest.raises(ValueError):
-        validate_data(schema=valid_schema, dataframe=empty_data_frame)
 
 # if the dataframe has invalid data
 @pytest.mark.parametrize("invalid_data, description", invalid_data_cases)

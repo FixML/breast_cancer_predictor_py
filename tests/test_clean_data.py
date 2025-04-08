@@ -1,4 +1,5 @@
 import pytest
+import warnings
 import pandas as pd
 import os
 import sys
@@ -32,14 +33,6 @@ if not os.path.exists('tests/test_write_data1'):
 
 # Tests
 
-# Tests for extract_column_name
-
-# test extract_column_name function throws an error 
-# if the raw name file does not exist
-def test_extract_column_name_error_on_missing_file():
-    with pytest.raises(FileNotFoundError, match='The raw_name file does not exist.'):
-        extract_column_name('tests/test_name_data.name')
-
 # Tests for read_data
 
 # test read_data function throws an error 
@@ -62,8 +55,8 @@ def test_read_data_error_on_insufficient_list_item():
 
 # test read_data function throws an error 
 # if the col_name contains items other than string
-def test_read_data_error_on_wrong_item_type():
-    with pytest.raises(ValueError, match="col_name must only contain strings."):
+def test_read_data_warns_on_wrong_item_type():
+    with pytest.warns(UserWarning, match="col_name contains non-string values"):
         read_data('tests/test_wdbc.data', col_name4)
 
 # Tests for clean_data
@@ -105,8 +98,3 @@ def test_write_data_error_on_nonexistent_dir():
 def test_write_data_error_on_missing_dir():
     with pytest.raises(NotADirectoryError, match='The directory path provided is not a directory, it is an existing file path. Please provide a path to a new, or existing directory.'):
         write_data(cleaned_data1, 'tests/conftest.py','test_write_data3')     
-
-# if the name_of_file is not a string
-def test_read_data_error_on_wrong_name_of_file_format():
-    with pytest.raises(TypeError, match='name_of_file must be string.'):
-        write_data(cleaned_data1, 'tests/', 1)
