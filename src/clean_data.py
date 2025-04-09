@@ -123,9 +123,9 @@ def read_data(raw_data, col_name):
     if not isinstance(col_name, list):
         raise TypeError("col_name must be a list.")
     
-    # Ensure the list has 32 items, if not raise error
+    # Ensure the items in col_name list is same as the number of columns, if not raise error
     if len(col_name) != raw_data.shape[1]:
-        raise ValueError("col_name must contain exactly 32 items.")
+        raise ValueError("The number of items in col_name must match the number of columns in raw_data.")
     
     # Ensure the list only contains strings, if not raise warning
     if not all(isinstance(item, str) for item in col_name):

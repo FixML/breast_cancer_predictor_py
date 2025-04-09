@@ -48,9 +48,9 @@ def test_read_data_error_on_non_list():
         read_data('tests/test_wdbc.data',col_name2)
 
 # test read_data function throws an error 
-# if the col_name does not have 32 values
+# if the items in col_name list does not match the number of columns of raw_data
 def test_read_data_error_on_insufficient_list_item():
-    with pytest.raises(ValueError, match="col_name must contain exactly 32 items."):
+    with pytest.raises(ValueError, match="The number of items in col_name must match the number of columns in raw_data."):
         read_data('tests/test_wdbc.data', col_name3)
 
 # test read_data function throws an error 

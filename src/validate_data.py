@@ -80,16 +80,6 @@ def build_schema_from_DataFrame(data_config, expected_columns):
         category_in = row['category'] if pd.notna(row['category']) else None
         max_nullable = row['max_nullable'] if pd.notna(row['max_nullable']) else None
         
-        # Define the correct Pandera data type
-        if column_type == 'int':
-            dtype = pa.Int
-        elif column_type == 'float':
-            dtype = pa.Float
-        elif column_type == 'str':
-            dtype = pa.String
-        else:
-            raise ValueError(f"Unsupported column type: {column_type}")
-        
         # Create value range validation checks
         value_range_checks = []
         if min_value is not None:
@@ -107,7 +97,7 @@ def build_schema_from_DataFrame(data_config, expected_columns):
                                                error=f'Too many missing values, must have at least {(1-max_nullable)*100}% non-null values.'))
         
         # Add the column schema to the schema dictionary
-        schema_dict[column_name] = pa.Column(dtype,nullable=True, checks=value_range_checks)
+        schema_dict[column_name] = pa.Column(column_type,nullable=True, checks=value_range_checks)
 
         global_checks=[
         pa.Check(lambda df: ~df.duplicated().any(), error="Duplicate rows found."),
