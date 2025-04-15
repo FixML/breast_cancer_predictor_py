@@ -67,7 +67,6 @@ def extract_column_name(text_lines):
     return colnames
     
 def read_data(raw_data, col_name):
-    ):
     """
     Read data from a CSV file and assign custom column names.
 
@@ -123,19 +122,21 @@ def read_data(raw_data, col_name):
     if not isinstance(col_name, list):
         raise TypeError("col_name must be a list.")
     
-    # Ensure the items in col_name list is same as the number of columns, if not raise error
-    if len(col_name) != raw_data.shape[1]:
-        raise ValueError("The number of items in col_name must match the number of columns in raw_data.")
-    
     # Ensure the list only contains strings, if not raise warning
     if not all(isinstance(item, str) for item in col_name):
-        warnings.warn("col_name must only contain strings.")
+        warnings.warn("col_name contains non-string values")
     
-    imported_data = pd.read_csv(raw_data, names=col_name, header=None)
+    imported_data = pd.read_csv(raw_data, header=None)
+
+    # Ensure the items in col_name list is same as the number of columns, if not raise error
+    if len(col_name) != imported_data.shape[1]:
+        raise ValueError("The number of items in col_name must match the number of columns in raw_data.")
+    
+    imported_data.columns = col_name
+
     return imported_data
 
 def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B' : 'Benign'}):
-    }):
     """
     Clean the imported data by dropping specified columns and relabeling values.
 
@@ -187,7 +188,6 @@ def clean_data(imported_data, drop_columns=['id'], relabel={'M' : 'Malignant','B
     return cleaned_data
 
 def write_data(dataframe, data_to, name_of_file):
-    ):
     """
     Write a dataframe to a specified directory as a CSV file.
 

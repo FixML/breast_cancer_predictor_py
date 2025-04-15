@@ -48,16 +48,17 @@ def test_read_data_error_on_non_list():
         read_data('tests/test_wdbc.data',col_name2)
 
 # test read_data function throws an error 
+# if the col_name contains items other than string
+def test_read_data_warns_on_wrong_item_type():
+    with pytest.warns(UserWarning, match="col_name contains non-string values"):
+        read_data('tests/test_wdbc.data', col_name4)
+        
+# test read_data function throws an error 
 # if the items in col_name list does not match the number of columns of raw_data
 def test_read_data_error_on_insufficient_list_item():
     with pytest.raises(ValueError, match="The number of items in col_name must match the number of columns in raw_data."):
         read_data('tests/test_wdbc.data', col_name3)
 
-# test read_data function throws an error 
-# if the col_name contains items other than string
-def test_read_data_warns_on_wrong_item_type():
-    with pytest.warns(UserWarning, match="col_name contains non-string values"):
-        read_data('tests/test_wdbc.data', col_name4)
 
 # Tests for clean_data
 
