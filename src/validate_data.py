@@ -55,18 +55,18 @@ def build_schema_from_DataFrame(data_config, expected_columns):
         raise TypeError("data_config must be a pandas dataframe.")
     
     # Ensure the data_config has following columns: column,type,max,min,category,max_nullable
-    required_columns = ['column', 'type', 'min', 'max','category', 'max_nullable']
+    config_columns = set(['column', 'type', 'min', 'max', 'category', 'max_nullable'])
     if data_config.empty:
         raise ValueError("The data_config must contain at least one row.")
     
-    if set(data_config.columns) != expected_columns or data_config.shape[1] != 6:
+    if set(data_config.columns) != config_columns or data_config.shape[1] != 6:
         raise ValueError("The data_config must have following columns: 'column', 'type', 'min', 'max', 'category', 'max_nullable'.")
 
     # Ensure the values of 'column' match the column names extracted from name file
     if expected_columns is not None:
-        actual_columns = data_config['column'].str.strip("'").tolist()  # Clean up any extra quotation marks in 'column'
-        if actual_columns != expected_columns:
-            raise ValueError("Column names in the config file do not match the expected columns.")
+        actual_columns = data_config['column'].str.strip().str.strip("'").tolist()
+        if set(actual_columns) != set(expected_columns):
+            raise ValueError(f"Column names in the config file do not match the expected columns.")
     
 
     schema_dict = {}

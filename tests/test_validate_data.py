@@ -6,10 +6,10 @@ import numpy as np
 from pandera import Column, DataFrameSchema
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.validate_data import build_schema_from_csv, validate_data
+from src.validate_data import build_schema_from_DataFrame, validate_data
 from src.clean_data import extract_column_name
 
-# Test setup for build_schema_from_csv
+# Test setup for build_schema_from_DataFrame
 
 invalid_data_config1 = pd.DataFrame({
     'column':['diagnosis','mean_radius'],
@@ -23,7 +23,7 @@ invalid_data_config2 = pd.DataFrame({
     'min':[None,4],
     'max':[None,30],
     'category':["Malignant,Benign",None],
-    'max_nullable':0.1
+    'max_nullable':[0,0.1]
 })
 valid_data_config = pd.DataFrame({
     'column':['diagnosis','mean_radius'],
@@ -31,42 +31,44 @@ valid_data_config = pd.DataFrame({
     'min':[None,6],
     'max':[None,40],
     'category':["Malignant,Benign",None],
-    'max_nullable':0.1
+    'max_nullable':[0,0.1]
 })
 
 valid_colnames = ['diagnosis','mean_radius']
 invalid_data_type = [1, 2, 3, 4, 5]
 
-# Tests for build_schema_from_csv
+# Tests for build_schema_from_DataFrame
 
-# test build_schema_from_csv function throws an error
+# test build_schema_from_DataFrame function throws an error
 # if the data_config is not a dataframe
-def test_build_schema_from_csv_error_on_wrong_data_config_type():
+def test_build_schema_from_DataFrame_error_on_wrong_data_config_type():
     with pytest.raises(TypeError, match="data_config must be a pandas dataframe."):
-        build_schema_from_csv(data_config=invalid_data_type, expected_columns=valid_colnames)
+        build_schema_from_DataFrame(data_config=invalid_data_type, expected_columns=valid_colnames)
 
 # if pandas dataframe doesn't have following columns: column,type,max,min,category,max_nullable
-def test_build_schema_from_csv_error_on_empty_df():
+def test_build_schema_from_DataFrame_error_on_empty_df():
     empty_df = pd.DataFrame(columns=valid_colnames)
 
     with pytest.raises(ValueError, match="must contain at least one row"):
-        build_schema_from_csv(data_config=empty_df, expected_columns=valid_colnames)
+        build_schema_from_DataFrame(data_config=empty_df, expected_columns=valid_colnames)
 
-def test_build_schema_from_csv_error_on_incorrect_columns():
+def test_build_schema_from_DataFrame_error_on_incorrect_columns():
     with pytest.raises(ValueError, match=f"The data_config must have following columns: 'column', 'type', 'min', 'max', 'category', 'max_nullable'."):
-        build_schema_from_csv(data_config=invalid_data_config1, expected_columns=valid_colnames)
+        build_schema_from_DataFrame(data_config=invalid_data_config1, expected_columns=valid_colnames)
 
 # if the values of 'column' match the column names extracted from name file
-def test_build_schedma_from_csv_error_on_mismatch_column_names():
-    with pytest.raises(ValueError, match="Column names in the config file do not match the expected columns."):
-        build_schema_from_csv(data_config=invalid_data_config2, expected_columns=valid_colnames)
+def test_build_schedma_from_DataFrame_error_on_mismatch_column_names():
+    with pytest.raises(ValueError, match=f"Column names in the config file do not match the expected columns."):
+        build_schema_from_DataFrame(data_config=invalid_data_config2, expected_columns=valid_colnames)
 
 # Tests setup for validate_data function
 
 data_config_df = pd.read_csv('tests/test_data_config.csv')
-colnames = extract_column_name('tests/test_wdbc.names')[1:] #removing column name: 'id'
+with open('tests/test_wdbc.names', 'r') as f:
+        raw_lines = [line.strip() for line in f if not line.startswith('#') and line.strip()]
+colnames = extract_column_name(raw_lines)[1:] #removing column name: 'id'
 
-valid_schema = build_schema_from_csv(data_config=data_config_df,expected_columns=colnames)
+valid_schema = build_schema_from_DataFrame(data_config=data_config_df,expected_columns=colnames)
 invalid_schema = [1]
 
 valid_data = pd.read_csv('tests/test_cleaned_data.csv', nrows=3)
@@ -137,7 +139,7 @@ invalid_data_cases.append((case_missing_obs, f"Check absent or incorrect for mis
 
 # Tests for validate_data function
 
-# test build_schema_from_csv function throws an error
+# test build_schema_from_DataFrame function throws an error
 # if the schema is invalid pandera dataframe schema
 def test_validate_data_error_on_invalid_schema_type():
     with pytest.raises(TypeError, match='schema must be a pandera dataframe schema.'):
