@@ -6,90 +6,44 @@ import click
 import os
 import numpy as np
 import pandas as pd
-import pickle
-from sklearn.model_selection import train_test_split
 from sklearn import set_config
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.compose import make_column_transformer, make_column_selector
-
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.split_train_test import split_train_test_data, validate_split_data
+from src.clean_data import write_data
+from src.preprocessor import create_save_preprocessor
 
 @click.command()
-@click.option('--raw-data', type=str, help="Path to raw data")
+@click.option('--cleaned-data', type=str, help="Path to cleaned data")
+@click.option('--train-data-size', type=str, help="Size of the dataset to include in the train split")
 @click.option('--data-to', type=str, help="Path to directory where processed data will be written to")
 @click.option('--preprocessor-to', type=str, help="Path to directory where the preprocessor object will be written to")
 @click.option('--seed', type=int, help="Random seed", default=123)
 
-def main(raw_data, data_to, preprocessor_to, seed):
+def main(cleaned_data, train_data_size, data_to, preprocessor_to, seed):
     '''This script splits the raw data into train and test sets, 
     and then preprocesses the data to be used in exploratory data analysis.
     It also saves the preprocessor to be used in the model training script.'''
     np.random.seed(seed)
     set_config(transform_output="pandas")
 
-    colnames = [
-        "id",
-        "class",
-        "mean_radius",
-        "mean_texture",
-        "mean_perimeter", 
-        "mean_area",
-        "mean_smoothness",
-        "mean_compactness",
-        "mean_concavity",
-        "mean_concave_points",
-        "mean_symmetry",
-        "mean_fractal_dimension",
-        "se_radius",
-        "se_texture",
-        "se_perimeter", 
-        "se_area",
-        "se_smoothness",
-        "se_compactness",
-        "se_concavity",
-        "se_concave_points",
-        "se_symmetry",
-        "se_fractal_dimension",
-        "max_radius",
-        "max_texture",
-        "max_perimeter", 
-        "max_area",
-        "max_smoothness",
-        "max_compactness",
-        "max_concavity",
-        "max_concave_points",
-        "max_symmetry",
-        "max_fractal_dimension"
-    ]
+    cleaned_data = pd.read_csv(cleaned_data)
+    cancer_train, cancer_test = split_train_test_data(cleaned_data, train_data_size, 
+                                                      stratify_by=cleaned_data["diagnosis"])
+    validate_split_data(cancer_train, cancer_test)
 
-    cancer = pd.read_csv(raw_data, names=colnames, header=None).drop(columns=['id'])
-    # re-label Class 'M' as 'Malignant', and Class 'B' as 'Benign'
-    cancer['class'] = cancer['class'].replace({
-        'M' : 'Malignant',
-        'B' : 'Benign'
-    })
+    try:
+        write_data(cancer_train, data_to)
+        write_data(cancer_test, data_to)
+    except:
+        os.makedirs(data_to)
+        write_data(cancer_train, data_to)
+        write_data(cancer_test, data_to)
 
-    # create the split
-    cancer_train, cancer_test = train_test_split(
-        cancer, train_size=0.70, stratify=cancer["class"]
-    )
-
-    cancer_train.to_csv(os.path.join(data_to, "cancer_train.csv"), index=False)
-    cancer_test.to_csv(os.path.join(data_to, "cancer_test.csv"), index=False)
-
-    cancer_preprocessor = make_column_transformer(
-        (StandardScaler(), make_column_selector(dtype_include='number')),
-        remainder='passthrough',
-        verbose_feature_names_out=False
-    )
-    pickle.dump(cancer_preprocessor, open(os.path.join(preprocessor_to, "cancer_preprocessor.pickle"), "wb"))
-
-    cancer_preprocessor.fit(cancer_train)
-    scaled_cancer_train = cancer_preprocessor.transform(cancer_train)
-    scaled_cancer_test = cancer_preprocessor.transform(cancer_test)
-
-    scaled_cancer_train.to_csv(os.path.join(data_to, "scaled_cancer_train.csv"), index=False)
-    scaled_cancer_test.to_csv(os.path.join(data_to, "scaled_cancer_test.csv"), index=False)
+    try:
+        create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
+    except:
+        os.makedirs(preprocessor_to)
+        create_save_preprocessor(cancer_train, cancer_test, data_to, preprocessor_to)
 
 if __name__ == '__main__':
     main()
